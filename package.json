@@ -1,0 +1,11 @@
+{
+  "name": "agency-templates-collection",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agency Template Studio & Client Live Pitch Engine",
+  "scripts": {
+    "dev": "cd showcase-hub && npm run dev",
+    "build": "cd showcase-hub && npm run build",
+    "build:templates": "powershell -Command \"cd demo_plazaclock; npm run build; cd ../padmacables; npm run build; cd ../jagmohan/frontend; npm run build; cd ../../youngwheels; npm run build\""
+  }
+}
