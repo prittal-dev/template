@@ -54,7 +54,7 @@ export default function SharePitchModal({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span className="badge-mono" style={{ fontSize: 10 }}>LINK GENERATOR</span>
-            <span style={{ fontSize: 14, fontWeight: 700, color: '#ffffff' }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-main)' }}>
               Shareable Pitch Link
             </span>
           </div>
@@ -72,7 +72,7 @@ export default function SharePitchModal({
         <div style={{
           padding: '10px 14px',
           borderRadius: 8,
-          background: 'rgba(255, 255, 255, 0.03)',
+          background: 'var(--bg-input)',
           border: '1px solid var(--border-subtle)',
           marginBottom: 16,
           display: 'flex',
@@ -84,9 +84,9 @@ export default function SharePitchModal({
               width: 8,
               height: 8,
               borderRadius: '50%',
-              background: clientBrand.color || activeTemplate?.accentColor || '#ffffff'
+              background: clientBrand.color || activeTemplate?.accentColor || 'var(--text-main)'
             }} />
-            <span style={{ fontSize: 13, fontWeight: 600, color: '#ffffff' }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-main)' }}>
               {brandName || 'Default Preview'}
             </span>
           </div>

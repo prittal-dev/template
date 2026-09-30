@@ -124,11 +124,11 @@ export default function BrandPersonalizer({
           width: '100%',
           maxWidth: 420,
           height: '100%',
-          background: '#0c0e15',
+          background: 'var(--bg-surface)',
           borderLeft: '1px solid var(--border-medium)',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: '-20px 0 60px rgba(0, 0, 0, 0.9)',
+          boxShadow: '-20px 0 60px rgba(0, 0, 0, 0.4)',
           overflowY: 'auto'
         }}
         onClick={(e) => e.stopPropagation()}
@@ -140,14 +140,14 @@ export default function BrandPersonalizer({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'rgba(255, 255, 255, 0.02)'
+          background: 'var(--bg-surface-elevated)'
         }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span className="badge-mono" style={{ fontSize: 10 }}>STUDIO ATELIER</span>
               <span style={{ fontSize: 11, color: '#10b981', fontWeight: 600 }}>● Live Sync</span>
             </div>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', marginTop: 4, letterSpacing: '-0.02em' }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)', marginTop: 4, letterSpacing: '-0.02em' }}>
               Brand & Identity Customizer
             </h3>
           </div>
@@ -167,7 +167,7 @@ export default function BrandPersonalizer({
           <div style={{
             padding: '12px 14px',
             borderRadius: 10,
-            background: 'rgba(255, 255, 255, 0.03)',
+            background: 'var(--bg-input)',
             border: '1px solid var(--border-subtle)',
             fontSize: 12,
             color: 'var(--text-muted)',
@@ -178,7 +178,7 @@ export default function BrandPersonalizer({
 
           {/* Business Name */}
           <div>
-            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#ffffff', marginBottom: 6 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-main)', marginBottom: 6 }}>
               Prospect Company / Brand Name
             </label>
             <input
@@ -190,9 +190,9 @@ export default function BrandPersonalizer({
                 width: '100%',
                 padding: '9px 12px',
                 borderRadius: 8,
-                background: 'rgba(255, 255, 255, 0.04)',
+                background: 'var(--bg-input)',
                 border: '1px solid var(--border-subtle)',
-                color: '#ffffff',
+                color: 'var(--text-main)',
                 fontSize: 13,
                 outline: 'none',
                 fontFamily: 'inherit'
@@ -202,7 +202,7 @@ export default function BrandPersonalizer({
 
           {/* Logo Replacement Section */}
           <div>
-            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#ffffff', marginBottom: 6 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-main)', marginBottom: 6 }}>
               Website Brand Logo
             </label>
 
@@ -296,9 +296,9 @@ export default function BrandPersonalizer({
                 width: '100%',
                 padding: '8px 12px',
                 borderRadius: 8,
-                background: 'rgba(255, 255, 255, 0.04)',
+                background: 'var(--bg-input)',
                 border: '1px solid var(--border-subtle)',
-                color: '#ffffff',
+                color: 'var(--text-main)',
                 fontSize: 12,
                 outline: 'none',
                 fontFamily: 'inherit'
@@ -309,7 +309,7 @@ export default function BrandPersonalizer({
           {/* Primary Accent Color */}
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: '#ffffff' }}>
+              <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-main)' }}>
                 Primary Brand Accent Color
               </label>
               <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)' }}>
@@ -330,7 +330,7 @@ export default function BrandPersonalizer({
                       height: 32,
                       borderRadius: 6,
                       background: preset.hex,
-                      border: isSelected ? '2px solid #ffffff' : '1px solid rgba(255, 255, 255, 0.15)',
+                      border: isSelected ? '2px solid var(--text-main)' : '1px solid var(--border-subtle)',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
@@ -369,9 +369,9 @@ export default function BrandPersonalizer({
                   flex: 1,
                   padding: '8px 12px',
                   borderRadius: 8,
-                  background: 'rgba(255, 255, 255, 0.04)',
+                  background: 'var(--bg-input)',
                   border: '1px solid var(--border-subtle)',
-                  color: '#ffffff',
+                  color: 'var(--text-main)',
                   fontSize: 12,
                   fontFamily: 'var(--font-mono)',
                   outline: 'none'
@@ -382,7 +382,7 @@ export default function BrandPersonalizer({
 
           {/* Tagline */}
           <div>
-            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#ffffff', marginBottom: 6 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-main)', marginBottom: 6 }}>
               Brand Tagline / Slogan
             </label>
             <input
@@ -394,9 +394,9 @@ export default function BrandPersonalizer({
                 width: '100%',
                 padding: '9px 12px',
                 borderRadius: 8,
-                background: 'rgba(255, 255, 255, 0.04)',
+                background: 'var(--bg-input)',
                 border: '1px solid var(--border-subtle)',
-                color: '#ffffff',
+                color: 'var(--text-main)',
                 fontSize: 13,
                 outline: 'none',
                 fontFamily: 'inherit'
@@ -406,7 +406,7 @@ export default function BrandPersonalizer({
 
           {/* WhatsApp / Phone */}
           <div>
-            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#ffffff', marginBottom: 6 }}>
+            <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-main)', marginBottom: 6 }}>
               WhatsApp / Direct Phone
             </label>
             <input
@@ -418,9 +418,9 @@ export default function BrandPersonalizer({
                 width: '100%',
                 padding: '9px 12px',
                 borderRadius: 8,
-                background: 'rgba(255, 255, 255, 0.04)',
+                background: 'var(--bg-input)',
                 border: '1px solid var(--border-subtle)',
-                color: '#ffffff',
+                color: 'var(--text-main)',
                 fontSize: 13,
                 outline: 'none',
                 fontFamily: 'inherit'

@@ -28,7 +28,7 @@ export default function TemplateCatalog({
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span className="badge-mono" style={{ color: '#ffffff', background: 'rgba(255, 255, 255, 0.08)' }}>
+          <span className="badge-mono" style={{ color: 'var(--text-main)', background: 'var(--bg-input)' }}>
             PORTFOLIO REPOSITORY
           </span>
           <span style={{ fontSize: 12, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
@@ -41,10 +41,10 @@ export default function TemplateCatalog({
             <h1 
               style={{ 
                 fontSize: 'clamp(32px, 3.8vw, 52px)', 
-                fontWeight: 700, 
+                fontWeight: 800, 
                 lineHeight: 1.1, 
                 letterSpacing: '-0.035em', 
-                color: '#ffffff',
+                color: 'var(--text-main)',
                 marginBottom: 14
               }}
             >
@@ -63,16 +63,17 @@ export default function TemplateCatalog({
               padding: '16px 24px', 
               borderRadius: 14, 
               background: 'var(--bg-surface)', 
-              border: '1px solid var(--border-subtle)' 
+              border: '1px solid var(--border-subtle)',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)'
             }}
           >
             <div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: '#ffffff', fontFamily: 'var(--font-mono)' }}>04</div>
+              <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>04</div>
               <div style={{ fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Frameworks</div>
             </div>
             <div style={{ width: 1, background: 'var(--border-subtle)' }} />
             <div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: '#ffffff', fontFamily: 'var(--font-mono)' }}>3x</div>
+              <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>3x</div>
               <div style={{ fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Device Modes</div>
             </div>
             <div style={{ width: 1, background: 'var(--border-subtle)' }} />
@@ -102,8 +103,8 @@ export default function TemplateCatalog({
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: clientBrand.color || '#10b981' }} />
-            <span style={{ fontSize: 13, color: '#ffffff' }}>
-              Active Client Simulation: <strong style={{ color: '#ffffff' }}>{clientBrand.name}</strong>
+            <span style={{ fontSize: 13, color: 'var(--text-main)' }}>
+              Active Client Simulation: <strong style={{ color: 'var(--text-main)' }}>{clientBrand.name}</strong>
               {clientBrand.tagline && <span style={{ color: 'var(--text-muted)' }}> — {clientBrand.tagline}</span>}
             </span>
           </div>
@@ -143,12 +144,13 @@ export default function TemplateCatalog({
           padding: '32px', 
           borderRadius: 18, 
           background: 'var(--bg-surface)', 
-          border: '1px solid var(--border-subtle)' 
+          border: '1px solid var(--border-subtle)',
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', letterSpacing: '-0.02em', marginBottom: 4 }}>
+            <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)', letterSpacing: '-0.02em', marginBottom: 4 }}>
               Three-Step Client Pitch Protocol
             </h3>
             <p style={{ fontSize: 13, color: 'var(--text-dim)', margin: 0 }}>
@@ -159,31 +161,31 @@ export default function TemplateCatalog({
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20 }}>
-          <div style={{ padding: 18, borderRadius: 12, background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-subtle)' }}>
+          <div style={{ padding: 18, borderRadius: 12, background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}>
             <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', display: 'block', marginBottom: 8 }}>
               PHASE 01
             </span>
-            <div style={{ fontSize: 14, fontWeight: 600, color: '#ffffff', marginBottom: 4 }}>Select Niche Framework</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)', marginBottom: 4 }}>Select Niche Framework</div>
             <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
               Pick the industry layout: Horology & Luxury, Heavy Engineering, Power Infrastructure, or Consumer Goods.
             </p>
           </div>
 
-          <div style={{ padding: 18, borderRadius: 12, background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-subtle)' }}>
+          <div style={{ padding: 18, borderRadius: 12, background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}>
             <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', display: 'block', marginBottom: 8 }}>
               PHASE 02
             </span>
-            <div style={{ fontSize: 14, fontWeight: 600, color: '#ffffff', marginBottom: 4 }}>Inject Client Brand</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)', marginBottom: 4 }}>Inject Client Brand</div>
             <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
               Input business name, upload their logo or generate an instant monogram, and set accent colors in real-time.
             </p>
           </div>
 
-          <div style={{ padding: 18, borderRadius: 12, background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-subtle)' }}>
+          <div style={{ padding: 18, borderRadius: 12, background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}>
             <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', display: 'block', marginBottom: 8 }}>
               PHASE 03
             </span>
-            <div style={{ fontSize: 14, fontWeight: 600, color: '#ffffff', marginBottom: 4 }}>Dispatch Pitch Link</div>
+            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)', marginBottom: 4 }}>Dispatch Pitch Link</div>
             <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
               Generate a custom link with preloaded brand query parameters and send directly via WhatsApp or email.
             </p>

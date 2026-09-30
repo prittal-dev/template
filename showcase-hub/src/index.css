@@ -44,29 +44,29 @@
   --bg-surface: #ffffff;
   --bg-surface-elevated: #f1f5f9;
   --bg-surface-hover: #e2e8f0;
-  --bg-input: rgba(0, 0, 0, 0.03);
+  --bg-input: rgba(15, 23, 42, 0.05);
   
   /* Precision Borders */
-  --border-subtle: rgba(0, 0, 0, 0.08);
-  --border-medium: rgba(0, 0, 0, 0.14);
-  --border-highlight: rgba(0, 0, 0, 0.25);
+  --border-subtle: rgba(15, 23, 42, 0.1);
+  --border-medium: rgba(15, 23, 42, 0.18);
+  --border-highlight: rgba(15, 23, 42, 0.3);
   
-  /* Text System */
-  --text-main: #0f172a;
-  --text-muted: #475569;
-  --text-dim: #64748b;
+  /* Text System - High Contrast Architectural Legibility */
+  --text-main: #090d16;
+  --text-muted: #2d3748;
+  --text-dim: #4a5568;
   
   /* UI Elements */
-  --btn-primary-bg: #0f172a;
+  --btn-primary-bg: #090d16;
   --btn-primary-text: #ffffff;
-  --deck-bg: rgba(255, 255, 255, 0.94);
-  --header-bg: rgba(248, 250, 252, 0.92);
+  --deck-bg: rgba(255, 255, 255, 0.96);
+  --header-bg: rgba(248, 250, 252, 0.94);
   --card-browser-bar: #f1f5f9;
   --device-frame-bg: #e2e8f0;
-  --shadow-card: 0 20px 40px -15px rgba(15, 23, 42, 0.08);
+  --shadow-card: 0 12px 32px -10px rgba(15, 23, 42, 0.08), 0 0 1px rgba(15, 23, 42, 0.12);
   
   /* Accents */
-  --accent-white: #0f172a;
+  --accent-white: #090d16;
   --accent-emerald: #059669;
   --accent-amber: #d97706;
   --accent-indigo: #4f46e5;

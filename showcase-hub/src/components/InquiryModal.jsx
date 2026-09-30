@@ -40,7 +40,7 @@ export default function InquiryModal({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span className="badge-mono" style={{ fontSize: 10 }}>COMMISSION ATELIER</span>
-            <span style={{ fontSize: 14, fontWeight: 700, color: '#ffffff' }}>
+            <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-main)' }}>
               Order Framework
             </span>
           </div>
@@ -70,7 +70,7 @@ export default function InquiryModal({
               <CheckCircle2 size={22} color="#10b981" />
             </div>
 
-            <h3 style={{ fontSize: 17, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>
+            <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-main)', marginBottom: 6 }}>
               Inquiry Dispatched
             </h3>
             <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 20 }}>
@@ -91,7 +91,7 @@ export default function InquiryModal({
             <div style={{
               padding: '10px 12px',
               borderRadius: 8,
-              background: 'rgba(255, 255, 255, 0.03)',
+              background: 'var(--bg-input)',
               border: '1px solid var(--border-subtle)',
               fontSize: 12,
               color: 'var(--text-muted)',
@@ -100,7 +100,7 @@ export default function InquiryModal({
               justifyContent: 'space-between'
             }}>
               <span>Selected Architecture:</span>
-              <strong style={{ color: '#ffffff' }}>{activeTemplate?.title}</strong>
+              <strong style={{ color: 'var(--text-main)' }}>{activeTemplate?.title}</strong>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -118,9 +118,9 @@ export default function InquiryModal({
                     width: '100%',
                     padding: '8px 12px',
                     borderRadius: 8,
-                    background: 'rgba(255, 255, 255, 0.04)',
+                    background: 'var(--bg-input)',
                     border: '1px solid var(--border-subtle)',
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 12,
                     outline: 'none',
                     fontFamily: 'inherit'
@@ -141,9 +141,9 @@ export default function InquiryModal({
                     width: '100%',
                     padding: '8px 12px',
                     borderRadius: 8,
-                    background: 'rgba(255, 255, 255, 0.04)',
+                    background: 'var(--bg-input)',
                     border: '1px solid var(--border-subtle)',
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 12,
                     outline: 'none',
                     fontFamily: 'inherit'
@@ -167,9 +167,9 @@ export default function InquiryModal({
                     width: '100%',
                     padding: '8px 12px',
                     borderRadius: 8,
-                    background: 'rgba(255, 255, 255, 0.04)',
+                    background: 'var(--bg-input)',
                     border: '1px solid var(--border-subtle)',
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 12,
                     outline: 'none',
                     fontFamily: 'inherit'
@@ -190,9 +190,9 @@ export default function InquiryModal({
                     width: '100%',
                     padding: '8px 12px',
                     borderRadius: 8,
-                    background: 'rgba(255, 255, 255, 0.04)',
+                    background: 'var(--bg-input)',
                     border: '1px solid var(--border-subtle)',
-                    color: '#ffffff',
+                    color: 'var(--text-main)',
                     fontSize: 12,
                     outline: 'none',
                     fontFamily: 'inherit'
@@ -213,9 +213,9 @@ export default function InquiryModal({
                   width: '100%',
                   padding: '8px 12px',
                   borderRadius: 8,
-                  background: 'rgba(255, 255, 255, 0.04)',
+                  background: 'var(--bg-input)',
                   border: '1px solid var(--border-subtle)',
-                  color: '#ffffff',
+                  color: 'var(--text-main)',
                   fontSize: 12,
                   outline: 'none',
                   resize: 'none',
