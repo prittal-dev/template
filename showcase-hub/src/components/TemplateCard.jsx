@@ -1,9 +1,19 @@
-import React from 'react';
-import { ArrowUpRight, SlidersHorizontal, Check, ExternalLink, Clock } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowUpRight, SlidersHorizontal, ExternalLink, Lock } from 'lucide-react';
 
 export default function TemplateCard({ template, onSelect, onCustomize, clientBrand }) {
   const isPersonalized = Boolean(clientBrand.name);
   const activeColor = clientBrand.color || template.accentColor;
+  const [iframeLoaded, setIframeLoaded] = useState(false);
+
+  const getCardIframeUrl = () => {
+    const url = new URL(template.previewUrl, window.location.origin);
+    if (clientBrand.name) url.searchParams.set('brand', clientBrand.name);
+    if (clientBrand.color) url.searchParams.set('color', clientBrand.color.replace('#', ''));
+    if (clientBrand.phone) url.searchParams.set('phone', clientBrand.phone);
+    if (clientBrand.tagline) url.searchParams.set('tagline', clientBrand.tagline);
+    return url.toString();
+  };
 
   return (
     <div 
@@ -15,74 +25,103 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
         overflow: 'hidden'
       }}
     >
-      {/* Top Banner with Subtle Atmospheric Hue */}
+      {/* Real Live Miniature Website Browser Preview */}
       <div 
-        style={{
-          height: 190,
-          position: 'relative',
-          background: `linear-gradient(180deg, ${template.heroColor}88 0%, #0d0f17 100%)`,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          padding: 20,
-          borderBottom: '1px solid var(--border-subtle)'
-        }}
+        className="card-preview-viewport"
+        onClick={() => onSelect(template)}
+        style={{ cursor: 'pointer' }}
       >
-        {/* Architectural hairline grid */}
-        <div 
-          style={{
-            position: 'absolute',
-            inset: 0,
-            opacity: 0.08,
-            backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
-            backgroundSize: '16px 16px',
-            pointerEvents: 'none'
-          }} 
-        />
-
-        {/* Top Badges */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
-          <span className="badge-mono" style={{ fontSize: 10, background: 'rgba(0, 0, 0, 0.4)' }}>
-            {template.badge || template.category}
-          </span>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)' }}>
-              BUILD: {template.completionTime}
-            </span>
-            <a 
-              href={template.previewUrl} 
-              target="_blank" 
-              rel="noreferrer"
-              title="Open Direct in New Tab"
-              style={{
-                color: 'var(--text-muted)',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 26,
-                height: 26,
-                borderRadius: 6,
-                background: 'rgba(255, 255, 255, 0.05)',
-                border: '1px solid var(--border-subtle)',
-                transition: 'all 0.2s'
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ExternalLink size={12} />
-            </a>
+        {/* Browser Top Window Bar */}
+        <div className="card-browser-header">
+          <div className="card-browser-dots">
+            <div className="card-browser-dot" style={{ background: '#ef4444' }} />
+            <div className="card-browser-dot" style={{ background: '#eab308' }} />
+            <div className="card-browser-dot" style={{ background: '#10b981' }} />
           </div>
+
+          <div className="card-browser-url">
+            <span>{clientBrand.name ? clientBrand.name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com' : `${template.id}.atelier.dev`}</span>
+          </div>
+
+          <a 
+            href={template.previewUrl} 
+            target="_blank" 
+            rel="noreferrer"
+            title="Open in new window"
+            style={{
+              color: 'var(--text-dim)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 20,
+              height: 20,
+              borderRadius: 4,
+              transition: 'color 0.2s'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ExternalLink size={11} />
+          </a>
         </div>
 
-        {/* Center Title & Industry */}
-        <div style={{ zIndex: 2 }}>
+        {/* Live Scaled Iframe Viewport */}
+        <div 
+          className="card-preview-frame"
+          style={{
+            background: template.heroColor ? `${template.heroColor}33` : '#0d1017'
+          }}
+        >
+          {/* Subtle placeholder while iframe loads */}
+          {!iframeLoaded && (
+            <div 
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: `linear-gradient(135deg, ${template.heroColor || '#0a0d14'}, #08090d)`,
+                color: 'var(--text-dim)',
+                fontFamily: 'var(--font-mono)',
+                fontSize: 11,
+                letterSpacing: '0.08em'
+              }}
+            >
+              LOADING PREVIEW...
+            </div>
+          )}
+
+          <iframe
+            src={getCardIframeUrl()}
+            title={`${template.title} preview`}
+            tabIndex="-1"
+            scrolling="no"
+            loading="lazy"
+            onLoad={() => setIframeLoaded(true)}
+            className="card-scaled-iframe"
+          />
+
+          {/* Interactive Hover Overlay */}
+          <div className="card-preview-overlay">
+            <button className="btn-primary" style={{ fontSize: 12, padding: '7px 14px' }}>
+              <span>Launch Live Simulator</span>
+              <ArrowUpRight size={13} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Card Content Information */}
+      <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        
+        {/* Industry Tag & Turnaround */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
           <div style={{ 
             fontSize: 11, 
             fontFamily: 'var(--font-mono)', 
             color: activeColor, 
-            letterSpacing: '0.06em', 
+            letterSpacing: '0.04em', 
             textTransform: 'uppercase',
-            marginBottom: 4,
             display: 'flex',
             alignItems: 'center',
             gap: 6
@@ -91,24 +130,28 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
             {template.industry}
           </div>
 
-          <h3 style={{ fontSize: 19, fontWeight: 700, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1.25 }}>
-            {isPersonalized ? `${clientBrand.name}` : template.title}
-          </h3>
-
-          <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.4 }}>
-            {isPersonalized && clientBrand.tagline ? clientBrand.tagline : template.tagline}
-          </p>
+          <span className="badge-mono" style={{ fontSize: 10 }}>
+            {template.completionTime}
+          </span>
         </div>
-      </div>
 
-      {/* Card Body */}
-      <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.55, marginBottom: 16 }}>
+        {/* Title */}
+        <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-main)', letterSpacing: '-0.02em', lineHeight: 1.25 }}>
+          {isPersonalized ? `${clientBrand.name}` : template.title}
+        </h3>
+
+        {/* Tagline */}
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.4 }}>
+          {isPersonalized && clientBrand.tagline ? clientBrand.tagline : template.tagline}
+        </p>
+
+        {/* Description */}
+        <p style={{ fontSize: 12, color: 'var(--text-dim)', lineHeight: 1.5, margin: '12px 0 14px 0' }}>
           {template.description}
         </p>
 
         {/* Key Features Minimalist List */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 18 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
           {template.keyFeatures.slice(0, 3).map((feat, idx) => (
             <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <span style={{ width: 4, height: 4, borderRadius: '50%', background: activeColor, flexShrink: 0 }} />
@@ -118,12 +161,12 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
         </div>
 
         {/* Tech Stack Pills */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 18 }}>
           {template.techStack.map((tech) => (
             <span 
               key={tech}
               className="badge-mono"
-              style={{ fontSize: 10, padding: '2px 7px', color: 'var(--text-dim)' }}
+              style={{ fontSize: 10, padding: '2px 6px' }}
             >
               {tech}
             </span>

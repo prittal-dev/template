@@ -1,5 +1,5 @@
 import React from 'react';
-import { SlidersHorizontal, ArrowUpRight, Monitor, Eye } from 'lucide-react';
+import { SlidersHorizontal, Eye, Sun, Moon } from 'lucide-react';
 
 export default function ShowcaseHeader({ 
   onOpenPersonalizer, 
@@ -9,7 +9,9 @@ export default function ShowcaseHeader({
   categories, 
   viewMode, 
   setViewMode,
-  selectedTemplate
+  selectedTemplate,
+  theme,
+  toggleTheme
 }) {
   return (
     <header 
@@ -17,10 +19,11 @@ export default function ShowcaseHeader({
         position: 'sticky', 
         top: 0, 
         zIndex: 100, 
-        background: 'rgba(8, 9, 13, 0.88)',
+        background: 'var(--header-bg)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid var(--border-subtle)'
+        borderBottom: '1px solid var(--border-subtle)',
+        transition: 'background-color 0.25s ease'
       }}
     >
       <div 
@@ -51,8 +54,8 @@ export default function ShowcaseHeader({
                 width: 32, 
                 height: 32, 
                 borderRadius: 8, 
-                background: '#ffffff', 
-                color: '#08090d',
+                background: 'var(--btn-primary-bg)', 
+                color: 'var(--btn-primary-text)',
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
@@ -66,7 +69,7 @@ export default function ShowcaseHeader({
 
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-0.02em', color: '#ffffff' }}>
+                <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
                   AGENCY STUDIO
                 </span>
                 <span className="badge-mono" style={{ fontSize: 10, padding: '2px 6px' }}>
@@ -75,15 +78,6 @@ export default function ShowcaseHeader({
               </div>
             </div>
           </div>
-
-          <div 
-            style={{ 
-              width: 1, 
-              height: 20, 
-              background: 'var(--border-subtle)',
-              display: 'none'
-            }} 
-          />
         </div>
 
         {/* Center: View Switcher or Minimalist Category Filter */}
@@ -96,8 +90,8 @@ export default function ShowcaseHeader({
               style={{ 
                 fontSize: 13, 
                 fontWeight: 600, 
-                color: '#ffffff',
-                background: 'rgba(255, 255, 255, 0.05)',
+                color: 'var(--text-main)',
+                background: 'var(--bg-input)',
                 padding: '4px 12px',
                 borderRadius: 7,
                 border: '1px solid var(--border-subtle)'
@@ -125,6 +119,15 @@ export default function ShowcaseHeader({
 
         {/* Right: Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {/* Theme Toggle Button (Dark / Light) */}
+          <button
+            onClick={toggleTheme}
+            className="theme-toggle-btn"
+            title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+          >
+            {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
+
           {viewMode === 'studio' && (
             <button
               onClick={() => setViewMode('catalog')}
@@ -143,13 +146,13 @@ export default function ShowcaseHeader({
               fontSize: 12, 
               padding: '7px 14px',
               borderColor: clientBrand.name ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-subtle)',
-              background: clientBrand.name ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255, 255, 255, 0.04)'
+              background: clientBrand.name ? 'rgba(16, 185, 129, 0.08)' : 'var(--bg-input)'
             }}
           >
             <SlidersHorizontal size={13} color={clientBrand.name ? '#10b981' : 'currentColor'} />
             {clientBrand.name ? (
               <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                Client: <strong style={{ color: '#ffffff' }}>{clientBrand.name}</strong>
+                Client: <strong>{clientBrand.name}</strong>
                 <span 
                   style={{ 
                     width: 7, 

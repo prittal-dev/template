@@ -12,6 +12,18 @@ export default function App() {
   const [selectedTemplate, setSelectedTemplate] = useState(TEMPLATES[0]);
   const [viewMode, setViewMode] = useState('catalog'); // 'catalog' | 'studio'
   const [activeFilter, setActiveFilter] = useState('All Templates');
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('agency_theme') || 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('agency_theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
 
   const [clientBrand, setClientBrand] = useState({
     name: '',
@@ -125,6 +137,8 @@ export default function App() {
             viewMode={viewMode}
             setViewMode={setViewMode}
             selectedTemplate={selectedTemplate}
+            theme={theme}
+            toggleTheme={toggleTheme}
           />
 
           <main style={{ flexGrow: 1 }}>
@@ -162,6 +176,8 @@ export default function App() {
           onOpenPersonalizer={() => setIsPersonalizerOpen(true)}
           onOpenShareModal={() => setIsShareModalOpen(true)}
           onOpenInquiryModal={() => setIsInquiryModalOpen(true)}
+          theme={theme}
+          toggleTheme={toggleTheme}
         />
       )}
 

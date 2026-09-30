@@ -12,7 +12,9 @@ import {
   ChevronDown, 
   RefreshCw,
   Lock,
-  MessageSquare
+  MessageSquare,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 export default function StudioPreviewer({
@@ -23,7 +25,9 @@ export default function StudioPreviewer({
   clientBrand,
   onOpenPersonalizer,
   onOpenShareModal,
-  onOpenInquiryModal
+  onOpenInquiryModal,
+  theme,
+  toggleTheme
 }) {
   const [viewport, setViewport] = useState('desktop'); // 'desktop' | 'tablet' | 'mobile'
   const [isLandscape, setIsLandscape] = useState(false);
@@ -83,7 +87,7 @@ export default function StudioPreviewer({
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: '#06070a', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--device-frame-bg)', overflow: 'hidden', transition: 'background-color 0.25s ease' }}>
       
       {/* Studio Top Control Deck */}
       {!isFullscreen && (
@@ -95,10 +99,11 @@ export default function StudioPreviewer({
             justifyContent: 'space-between', 
             padding: '0 18px', 
             zIndex: 50,
-            background: 'rgba(9, 10, 15, 0.95)',
+            background: 'var(--header-bg)',
             borderBottom: '1px solid var(--border-subtle)',
             flexShrink: 0,
-            backdropFilter: 'blur(16px)'
+            backdropFilter: 'blur(16px)',
+            transition: 'background-color 0.25s ease'
           }}
         >
           {/* Left: Back & Template Dropdown */}
@@ -126,8 +131,8 @@ export default function StudioPreviewer({
                   }
                 }}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  color: '#ffffff',
+                  background: 'var(--bg-input)',
+                  color: 'var(--text-main)',
                   border: '1px solid var(--border-subtle)',
                   borderRadius: 8,
                   padding: '6px 28px 6px 10px',
@@ -140,7 +145,7 @@ export default function StudioPreviewer({
                 }}
               >
                 {templates.map(t => (
-                  <option key={t.id} value={t.id} style={{ background: '#0e1118', color: '#ffffff' }}>
+                  <option key={t.id} value={t.id} style={{ background: 'var(--bg-surface)', color: 'var(--text-main)' }}>
                     {t.title}
                   </option>
                 ))}
@@ -198,8 +203,8 @@ export default function StudioPreviewer({
                 style={{
                   padding: '6px 10px',
                   fontSize: 11,
-                  background: isLandscape ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
-                  color: isLandscape ? '#ffffff' : 'var(--text-muted)'
+                  background: isLandscape ? 'var(--bg-surface-hover)' : 'transparent',
+                  color: isLandscape ? 'var(--text-main)' : 'var(--text-muted)'
                 }}
               >
                 <RotateCw size={12} />
@@ -210,6 +215,15 @@ export default function StudioPreviewer({
 
           {/* Right Actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="theme-toggle-btn"
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} mode`}
+            >
+              {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+            </button>
+
             {/* Personalize Button */}
             <button
               onClick={onOpenPersonalizer}
@@ -218,7 +232,7 @@ export default function StudioPreviewer({
                 fontSize: 12, 
                 padding: '6px 12px',
                 borderColor: clientBrand.name ? 'rgba(16, 185, 129, 0.3)' : 'var(--border-subtle)',
-                background: clientBrand.name ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255, 255, 255, 0.04)'
+                background: clientBrand.name ? 'rgba(16, 185, 129, 0.08)' : 'var(--bg-input)'
               }}
             >
               <SlidersHorizontal size={13} color={clientBrand.name ? '#10b981' : 'currentColor'} />
@@ -292,7 +306,7 @@ export default function StudioPreviewer({
             zIndex: 9999,
             fontSize: 12,
             padding: '6px 12px',
-            background: 'rgba(8, 9, 13, 0.85)',
+            background: 'var(--header-bg)',
             backdropFilter: 'blur(10px)'
           }}
         >
@@ -311,7 +325,7 @@ export default function StudioPreviewer({
               <div 
                 style={{
                   height: 34,
-                  background: '#0a0c12',
+                  background: 'var(--card-browser-bar)',
                   display: 'flex',
                   alignItems: 'center',
                   padding: '0 14px',
@@ -321,9 +335,9 @@ export default function StudioPreviewer({
               >
                 {/* Traffic Light Dots */}
                 <div style={{ display: 'flex', gap: 6 }}>
-                  <div style={{ width: 9, height: 9, borderRadius: '50%', background: 'rgba(255, 255, 255, 0.2)' }} />
-                  <div style={{ width: 9, height: 9, borderRadius: '50%', background: 'rgba(255, 255, 255, 0.2)' }} />
-                  <div style={{ width: 9, height: 9, borderRadius: '50%', background: 'rgba(255, 255, 255, 0.2)' }} />
+                  <div style={{ width: 9, height: 9, borderRadius: '50%', background: '#ef4444', opacity: 0.8 }} />
+                  <div style={{ width: 9, height: 9, borderRadius: '50%', background: '#eab308', opacity: 0.8 }} />
+                  <div style={{ width: 9, height: 9, borderRadius: '50%', background: '#10b981', opacity: 0.8 }} />
                 </div>
 
                 {/* Minimalist URL Bar */}
@@ -333,7 +347,7 @@ export default function StudioPreviewer({
                     maxWidth: 520,
                     margin: '0 auto',
                     height: 22,
-                    background: 'rgba(255, 255, 255, 0.04)',
+                    background: 'var(--bg-input)',
                     borderRadius: 5,
                     display: 'flex',
                     alignItems: 'center',
@@ -342,12 +356,12 @@ export default function StudioPreviewer({
                     fontSize: 11,
                     color: 'var(--text-dim)',
                     fontFamily: 'var(--font-mono)',
-                    border: '1px solid rgba(255, 255, 255, 0.04)'
+                    border: '1px solid var(--border-subtle)'
                   }}
                 >
                   <Lock size={10} color="#10b981" />
                   <span style={{ color: 'var(--text-muted)' }}>https://</span>
-                  <span style={{ color: '#ffffff', fontWeight: 500 }}>
+                  <span style={{ color: 'var(--text-main)', fontWeight: 500 }}>
                     {clientBrand.name ? clientBrand.name.toLowerCase().replace(/[^a-z0-9]/g, '') + '.com' : activeTemplate.id + '.atelier.dev'}
                   </span>
                 </div>
