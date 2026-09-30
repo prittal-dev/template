@@ -125,3 +125,25 @@ In `showcase-hub/vite.config.js`, add one line to `templateMap`:
 ```
 
 That's it! Your new template will instantly appear in the catalog and live previewer!
+
+---
+
+## 🌐 Deploying to Vercel / Production
+
+When deploying to Vercel or any hosting platform:
+
+1. **All templates are bundled in `showcase-hub/public/templates/`**:
+   Whenever you build or update a template, run:
+   ```bash
+   npm run sync
+   ```
+   This automatically syncs the compiled templates (`plazaclock`, `electwell`, `padmacables`, `youngwheels`) into `showcase-hub/public/templates/`.
+
+2. **In Vercel Project Settings**:
+   * **Root Directory**: `showcase-hub` (or `.` root)
+   * **Framework Preset**: `Vite`
+   * **Build Command**: `npm run build`
+   * **Output Directory**: `dist`
+
+3. When deployed, all templates load at `/templates/<template-name>/index.html` inside the device simulator with zero 404 errors!
+

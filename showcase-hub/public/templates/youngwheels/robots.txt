@@ -1,0 +1,59 @@
+# ==============================================================================
+# Young Wheels Official Robots.txt
+# Website: https://www.youngwheels.in
+# Description: Search Engine Crawler & Indexing Directives
+# ==============================================================================
+
+# Global Rules for All Search Engine Crawlers
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /thank-you
+Disallow: /thank-you/
+Disallow: /404
+Disallow: /*?*tab=admin
+Disallow: /*?*admin
+
+# Directives for Googlebot
+User-agent: Googlebot
+Allow: /
+Allow: /assets/
+Allow: /sitemap.xml
+Disallow: /admin
+Disallow: /admin/
+Disallow: /thank-you
+Disallow: /thank-you/
+
+# Directives for Googlebot Image Crawler
+User-agent: Googlebot-Image
+Allow: /
+Allow: /assets/
+Allow: /assets/products/
+Allow: /favicon*
+Allow: /logo*
+Allow: /apple-touch-icon*
+
+# Directives for Bingbot
+User-agent: Bingbot
+Allow: /
+Allow: /assets/
+Allow: /sitemap.xml
+Disallow: /admin
+Disallow: /admin/
+
+# Directives for Social Media Link Preview Bots
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+# Official XML Sitemap Location
+Sitemap: https://www.youngwheels.in/sitemap.xml

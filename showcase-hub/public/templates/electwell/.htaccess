@@ -1,0 +1,140 @@
+# ==============================================================================
+# GODADDY HOSTING OPTIMIZATION & PRODUCTION APACHE CONFIGURATION
+# ==============================================================================
+
+# Disable directory listing
+Options -Indexes
+
+# Prevent Apache MultiViews negotiation conflicts
+<IfModule mod_negotiation.c>
+  Options -MultiViews
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 1. Explicit MIME Types (Crucial for GoDaddy to serve WebP, AVIF & Fonts correctly)
+# ------------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  # Images
+  AddType image/webp .webp
+  AddType image/avif .avif
+  AddType image/svg+xml .svg .svgz
+  AddType image/x-icon .ico
+  AddType image/jpeg .jpg .jpeg
+  AddType image/png .png
+
+  # Web Fonts
+  AddType font/woff2 .woff2
+  AddType font/woff .woff
+  AddType font/ttf .ttf
+  AddType font/otf .otf
+  AddType font/eot .eot
+
+  # Code & Data
+  AddType application/javascript .js .mjs
+  AddType text/css .css
+  AddType application/json .json
+  AddType application/manifest+json .webmanifest
+  AddType application/xml .xml
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 2. Gzip / Deflate Compression (Reduces text, css, js & svg transfer size by ~70%)
+# ------------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript text/javascript
+  AddOutputFilterByType DEFLATE application/json application/xml application/rss+xml
+  AddOutputFilterByType DEFLATE image/svg+xml image/x-icon
+  AddOutputFilterByType DEFLATE font/woff font/woff2 font/ttf font/otf font/eot
+  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject application/x-font-ttf
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 3. Browser Cache Expiration (mod_expires)
+# ------------------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+
+  # Images & Icons (1 Year)
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/avif "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+
+  # Fonts (1 Year)
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+
+  # Stylesheets & Scripts (1 Year - Vite uses content hashes)
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+
+  # Data files
+  ExpiresByType application/json "access plus 1 hour"
+  ExpiresByType application/xml "access plus 1 hour"
+
+  # HTML & Manifest (0 seconds - guarantees instant updates after new deploy)
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType application/manifest+json "access plus 1 week"
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 4. Cache-Control & Security Headers (mod_headers)
+# ------------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  # 1-Year Immutable Caching for Static Hashed Assets (Images, Fonts, CSS, JS)
+  <FilesMatch "\.(ico|jpe?g|png|gif|webp|avif|svg|woff2?|ttf|otf|eot|css|js)$">
+    Header set Cache-Control "max-age=31536000, public, immutable"
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+
+  # Prevent caching of index.html so users always receive latest code upon redeployment
+  <FilesMatch "(index\.html|index\.htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+
+  # Disable ETag to prevent GoDaddy multi-cluster node mismatch re-downloads
+  Header unset ETag
+  FileETag None
+
+  # Security Headers
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# 5. SPA Routing & HTTPS Redirects (mod_rewrite)
+# ------------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Force HTTPS (GoDaddy SSL & Proxy compatible)
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Block access to hidden configuration files (.git, .env, etc.)
+  RewriteRule "(^|/)\.(?!well-known)" - [F]
+
+  # If requested file or directory exists physically, serve directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Fallback all client-side SPA routes to index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+
