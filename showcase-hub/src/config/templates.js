@@ -16,7 +16,7 @@ export const TEMPLATES = [
     completionTime: '3-5 Days',
     heroColor: '#4A1535',
     accentColor: '#E6C378',
-    previewUrl: '/templates/plazaclock/index.html',
+    previewUrl: '/templates/plazaclock/',
     description:
       'Ultra-luxury e-commerce atelier design featuring Aubergine/Plum backdrops, Warm Gold accents, Cormorant Garamond typography, 0% image crop containers, and smooth scroll interactions.',
     keyFeatures: [
@@ -50,7 +50,7 @@ export const TEMPLATES = [
     completionTime: '4-7 Days',
     heroColor: '#0c2340',
     accentColor: '#f97316',
-    previewUrl: '/templates/electwell/index.html',
+    previewUrl: '/templates/electwell/',
     description:
       'Heavy industrial B2B manufacturing portal engineered for high credibility. Highlights technical centrifugal specs, air pollution control, ISO standards, and multi-parameter RFQ inquiry flows.',
     keyFeatures: [
@@ -84,7 +84,7 @@ export const TEMPLATES = [
     completionTime: '3-5 Days',
     heroColor: '#0a0d14',
     accentColor: '#eab308',
-    previewUrl: '/templates/padmacables/index.html',
+    previewUrl: '/templates/padmacables/',
     description:
       'Government and utility-grade digital showroom showcasing high-tension power cables, automotive harnesses, and multi-core conductors with Lenis smooth physics and technical blueprints.',
     keyFeatures: [
@@ -118,7 +118,7 @@ export const TEMPLATES = [
     completionTime: '3-5 Days',
     heroColor: '#1e1b4b',
     accentColor: '#f43f5e',
-    previewUrl: '/templates/youngwheels/index.html',
+    previewUrl: '/templates/youngwheels/',
     description:
       'Vibrant, hyper-engaging consumer catalog and manufacturing portal. Features dynamic product carousels, safety certifications, interactive category navigation, and direct WhatsApp commerce.',
     keyFeatures: [
