@@ -89,22 +89,27 @@ export default function App() {
       {toast.show && (
         <div style={{
           position: 'fixed',
-          top: 20,
+          top: 24,
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 99999,
-          background: 'rgba(16, 20, 31, 0.95)',
+          background: 'rgba(14, 17, 24, 0.95)',
           color: '#ffffff',
-          padding: '10px 22px',
-          borderRadius: 999,
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          boxShadow: '0 12px 30px rgba(0, 0, 0, 0.6)',
-          backdropFilter: 'blur(12px)',
-          fontSize: 13,
-          fontWeight: 600,
-          animation: 'slideDown 0.2s ease-out'
+          padding: '8px 18px',
+          borderRadius: 8,
+          border: '1px solid var(--border-medium)',
+          boxShadow: '0 12px 30px rgba(0, 0, 0, 0.8)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          fontSize: 12,
+          fontFamily: 'var(--font-mono)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          animation: 'fadeIn 0.2s ease-out'
         }}>
-          {toast.message}
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+          <span>{toast.message}</span>
         </div>
       )}
 
@@ -135,14 +140,15 @@ export default function App() {
           {/* Catalog Footer */}
           <footer style={{
             borderTop: '1px solid var(--border-subtle)',
-            background: 'rgba(5, 7, 11, 0.8)',
-            padding: '28px 24px',
+            background: 'var(--bg-dark)',
+            padding: '32px 24px',
             textAlign: 'center',
-            fontSize: 13,
-            color: 'var(--text-dim)'
+            fontSize: 12,
+            color: 'var(--text-dim)',
+            fontFamily: 'var(--font-mono)'
           }}>
             <p style={{ margin: 0 }}>
-              Agency Template Studio &copy; {new Date().getFullYear()} — Built with React, Vite & High-Performance Web Standards.
+              AGENCY STUDIO ATELIER &copy; {new Date().getFullYear()} — HIGH-PERFORMANCE CLIENT PRESENTATION ENGINE
             </p>
           </footer>
         </>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CalendarCheck, CheckCircle2, Send } from 'lucide-react';
+import { X, CheckCircle2, Send, MessageSquare } from 'lucide-react';
 
 export default function InquiryModal({
   isOpen,
@@ -17,200 +17,193 @@ export default function InquiryModal({
     phone: clientBrand.phone || '',
     email: clientBrand.email || '',
     timeline: '3-5 Days (Express Delivery)',
-    notes: `We love the ${activeTemplate?.title} design and would like to build our website with similar UI.`
+    notes: `We are interested in the ${activeTemplate?.title} framework for our brand.`
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
-    showToast('Inquiry submitted! We will contact you within 2 hours.');
+    showToast('Inquiry received! We will follow up shortly.');
   };
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 1100,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'rgba(0, 0, 0, 0.75)',
-        backdropFilter: 'blur(8px)',
-        padding: 20
-      }}
+      className="modal-overlay"
       onClick={onClose}
     >
       <div
-        className="glass-panel"
-        style={{
-          width: '100%',
-          maxWidth: 520,
-          borderRadius: 24,
-          background: '#0e121d',
-          border: '1px solid var(--border-highlight)',
-          boxShadow: '0 30px 80px rgba(0, 0, 0, 0.9)',
-          padding: 28,
-          animation: 'slideDown 0.2s ease-out'
-        }}
+        className="modal-content"
+        style={{ padding: '26px' }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{
-              width: 36,
-              height: 36,
-              borderRadius: 10,
-              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}>
-              <CalendarCheck size={18} color="#ffffff" />
-            </div>
-            <div>
-              <h3 style={{ fontSize: 18, fontWeight: 800, color: '#ffffff' }}>Order This Website</h3>
-              <p style={{ fontSize: 12, color: 'var(--text-dim)', margin: 0 }}>Template: {activeTemplate?.title}</p>
-            </div>
+            <span className="badge-mono" style={{ fontSize: 10 }}>COMMISSION ATELIER</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: '#ffffff' }}>
+              Order Framework
+            </span>
           </div>
 
           <button
             onClick={onClose}
-            style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
+            className="btn-ghost"
+            style={{ padding: 4 }}
           >
-            <X size={20} />
+            <X size={16} />
           </button>
         </div>
 
         {submitted ? (
           <div style={{ textAlign: 'center', padding: '30px 10px' }}>
             <div style={{
-              width: 60,
-              height: 60,
+              width: 44,
+              height: 44,
               borderRadius: '50%',
-              background: 'rgba(34, 197, 94, 0.15)',
+              background: 'rgba(16, 185, 129, 0.1)',
+              border: '1px solid rgba(16, 185, 129, 0.3)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               margin: '0 auto 16px auto'
             }}>
-              <CheckCircle2 size={32} color="#22c55e" />
+              <CheckCircle2 size={22} color="#10b981" />
             </div>
-            <h4 style={{ fontSize: 20, fontWeight: 800, color: '#ffffff', marginBottom: 8 }}>
-              Proposal Request Received!
-            </h4>
-            <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 24 }}>
-              Thank you! Our engineering team will review your specifications for <strong>{formData.company || activeTemplate?.title}</strong> and send a comprehensive proposal & timeline within 2 hours.
+
+            <h3 style={{ fontSize: 17, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>
+              Inquiry Dispatched
+            </h3>
+            <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 20 }}>
+              We have received your specifications for <strong>{activeTemplate?.title}</strong>. Our lead design engineering team will reach out with customized timeline & proposal.
             </p>
+
             <button
-              onClick={() => { setSubmitted(false); onClose(); }}
-              className="btn-primary"
-              style={{ width: '100%', justifyContent: 'center' }}
+              onClick={onClose}
+              className="btn-secondary"
+              style={{ fontSize: 12, padding: '7px 16px' }}
             >
-              Close Window
+              Close
             </button>
           </div>
         ) : (
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>
-                Your Name
-              </label>
-              <input
-                type="text"
-                required
-                placeholder="John Doe"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                style={{
-                  width: '100%',
-                  padding: '9px 12px',
-                  borderRadius: 10,
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid var(--border-subtle)',
-                  color: '#ffffff',
-                  fontSize: 13,
-                  outline: 'none'
-                }}
-              />
+            
+            <div style={{
+              padding: '10px 12px',
+              borderRadius: 8,
+              background: 'rgba(255, 255, 255, 0.03)',
+              border: '1px solid var(--border-subtle)',
+              fontSize: 12,
+              color: 'var(--text-muted)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+              <span>Selected Architecture:</span>
+              <strong style={{ color: '#ffffff' }}>{activeTemplate?.title}</strong>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>
-                  Company Name
+                <label style={{ display: 'block', fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+                  Your Name
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="Apex Enterprise"
-                  value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  placeholder="e.g. Rahul Sharma"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   style={{
                     width: '100%',
-                    padding: '9px 12px',
-                    borderRadius: 10,
-                    background: 'rgba(255, 255, 255, 0.06)',
+                    padding: '8px 12px',
+                    borderRadius: 8,
+                    background: 'rgba(255, 255, 255, 0.04)',
                     border: '1px solid var(--border-subtle)',
                     color: '#ffffff',
-                    fontSize: 13,
-                    outline: 'none'
+                    fontSize: 12,
+                    outline: 'none',
+                    fontFamily: 'inherit'
                   }}
                 />
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>
-                  Phone / WhatsApp
+                <label style={{ display: 'block', fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+                  Company Name
                 </label>
                 <input
-                  type="tel"
+                  type="text"
+                  placeholder="e.g. Apex Industries"
+                  value={formData.company}
+                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    borderRadius: 8,
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid var(--border-subtle)',
+                    color: '#ffffff',
+                    fontSize: 12,
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <div>
+                <label style={{ display: 'block', fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+                  WhatsApp / Phone
+                </label>
+                <input
+                  type="text"
                   required
-                  placeholder="+91 98765 43210"
+                  placeholder="+91 98000 00000"
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   style={{
                     width: '100%',
-                    padding: '9px 12px',
-                    borderRadius: 10,
-                    background: 'rgba(255, 255, 255, 0.06)',
+                    padding: '8px 12px',
+                    borderRadius: 8,
+                    background: 'rgba(255, 255, 255, 0.04)',
                     border: '1px solid var(--border-subtle)',
                     color: '#ffffff',
-                    fontSize: 13,
-                    outline: 'none'
+                    fontSize: 12,
+                    outline: 'none',
+                    fontFamily: 'inherit'
+                  }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+                  Work Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="contact@domain.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  style={{
+                    width: '100%',
+                    padding: '8px 12px',
+                    borderRadius: 8,
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid var(--border-subtle)',
+                    color: '#ffffff',
+                    fontSize: 12,
+                    outline: 'none',
+                    fontFamily: 'inherit'
                   }}
                 />
               </div>
             </div>
 
             <div>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>
-                Target Delivery Timeline
-              </label>
-              <select
-                value={formData.timeline}
-                onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
-                style={{
-                  width: '100%',
-                  padding: '9px 12px',
-                  borderRadius: 10,
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid var(--border-subtle)',
-                  color: '#ffffff',
-                  fontSize: 13,
-                  outline: 'none'
-                }}
-              >
-                <option value="3-5 Days (Express Delivery)" style={{ background: '#11141f' }}>3-5 Days (Express Delivery)</option>
-                <option value="1-2 Weeks (Standard)" style={{ background: '#11141f' }}>1-2 Weeks (Standard)</option>
-                <option value="Custom Project Timeline" style={{ background: '#11141f' }}>Custom Project Timeline</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontSize: 12, fontWeight: 700, color: '#ffffff', marginBottom: 4 }}>
-                Project Requirements / Special Requests
+              <label style={{ display: 'block', fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 4 }}>
+                Custom Requirements & Notes
               </label>
               <textarea
                 rows={3}
@@ -218,14 +211,16 @@ export default function InquiryModal({
                 onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                 style={{
                   width: '100%',
-                  padding: '9px 12px',
-                  borderRadius: 10,
-                  background: 'rgba(255, 255, 255, 0.06)',
+                  padding: '8px 12px',
+                  borderRadius: 8,
+                  background: 'rgba(255, 255, 255, 0.04)',
                   border: '1px solid var(--border-subtle)',
                   color: '#ffffff',
-                  fontSize: 13,
+                  fontSize: 12,
                   outline: 'none',
-                  resize: 'none'
+                  resize: 'none',
+                  fontFamily: 'inherit',
+                  lineHeight: 1.4
                 }}
               />
             </div>
@@ -233,17 +228,12 @@ export default function InquiryModal({
             <button
               type="submit"
               className="btn-primary"
-              style={{
-                width: '100%',
-                justifyContent: 'center',
-                padding: '12px',
-                fontSize: 14,
-                marginTop: 6
-              }}
+              style={{ width: '100%', padding: '10px', fontSize: 13, marginTop: 4 }}
             >
-              <Send size={15} />
-              <span>Submit Project Request</span>
+              <Send size={13} />
+              <span>Submit Project Inquiry</span>
             </button>
+
           </form>
         )}
 

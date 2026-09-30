@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Sparkles, ExternalLink, Star, Clock, CheckCircle2, Sliders, Smartphone, Laptop } from 'lucide-react';
+import { ArrowUpRight, SlidersHorizontal, Check, ExternalLink, Clock } from 'lucide-react';
 
 export default function TemplateCard({ template, onSelect, onCustomize, clientBrand }) {
   const isPersonalized = Boolean(clientBrand.name);
@@ -7,21 +7,20 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
 
   return (
     <div 
-      className="glass-panel glass-panel-hover"
+      className="glass-card"
       style={{
-        borderRadius: 20,
-        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        position: 'relative'
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
-      {/* Top Card Preview Banner */}
+      {/* Top Banner with Subtle Atmospheric Hue */}
       <div 
         style={{
-          height: 220,
+          height: 190,
           position: 'relative',
-          background: `linear-gradient(135deg, ${template.heroColor}dd 0%, #0d111c 100%)`,
+          background: `linear-gradient(180deg, ${template.heroColor}88 0%, #0d0f17 100%)`,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -29,109 +28,90 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
           borderBottom: '1px solid var(--border-subtle)'
         }}
       >
-        {/* Subtle grid pattern background */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          opacity: 0.12,
-          backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
-          backgroundSize: '16px 16px',
-          pointerEvents: 'none'
-        }} />
+        {/* Architectural hairline grid */}
+        <div 
+          style={{
+            position: 'absolute',
+            inset: 0,
+            opacity: 0.08,
+            backgroundImage: 'radial-gradient(circle, #ffffff 1px, transparent 1px)',
+            backgroundSize: '16px 16px',
+            pointerEvents: 'none'
+          }} 
+        />
 
         {/* Top Badges */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
-          <span style={{
-            fontSize: 11,
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-            padding: '4px 10px',
-            borderRadius: 6,
-            background: 'rgba(255, 255, 255, 0.12)',
-            color: '#ffffff',
-            backdropFilter: 'blur(8px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            {template.category}
+          <span className="badge-mono" style={{ fontSize: 10, background: 'rgba(0, 0, 0, 0.4)' }}>
+            {template.badge || template.category}
           </span>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(0, 0, 0, 0.4)', padding: '3px 8px', borderRadius: 20 }}>
-            <Star size={12} fill="#eab308" color="#eab308" />
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#fef08a' }}>{template.rating}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 11, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)' }}>
+              BUILD: {template.completionTime}
+            </span>
+            <a 
+              href={template.previewUrl} 
+              target="_blank" 
+              rel="noreferrer"
+              title="Open Direct in New Tab"
+              style={{
+                color: 'var(--text-muted)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 26,
+                height: 26,
+                borderRadius: 6,
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid var(--border-subtle)',
+                transition: 'all 0.2s'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <ExternalLink size={12} />
+            </a>
           </div>
         </div>
 
-        {/* Center Presentation Title & Accent Glow */}
+        {/* Center Title & Industry */}
         <div style={{ zIndex: 2 }}>
           <div style={{ 
-            display: 'inline-flex', 
-            alignItems: 'center', 
-            gap: 6,
-            fontSize: 11,
-            color: activeColor,
-            fontWeight: 600,
-            marginBottom: 6
+            fontSize: 11, 
+            fontFamily: 'var(--font-mono)', 
+            color: activeColor, 
+            letterSpacing: '0.06em', 
+            textTransform: 'uppercase',
+            marginBottom: 4,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6
           }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: activeColor, boxShadow: `0 0 8px ${activeColor}` }} />
+            <span style={{ width: 6, height: 6, borderRadius: '50%', background: activeColor }} />
             {template.industry}
           </div>
-          <h3 style={{ fontSize: 22, fontWeight: 800, color: '#ffffff', lineHeight: 1.2 }}>
-            {isPersonalized ? `${clientBrand.name} Demo` : template.title}
+
+          <h3 style={{ fontSize: 19, fontWeight: 700, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1.25 }}>
+            {isPersonalized ? `${clientBrand.name}` : template.title}
           </h3>
-          <p style={{ fontSize: 13, color: 'rgba(255, 255, 255, 0.7)', marginTop: 4 }}>
+
+          <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.4 }}>
             {isPersonalized && clientBrand.tagline ? clientBrand.tagline : template.tagline}
           </p>
         </div>
-
-        {/* Bottom Banner Status */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 2 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ 
-              fontSize: 11, 
-              color: 'var(--text-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 4
-            }}>
-              <Clock size={12} /> Ready in {template.completionTime}
-            </span>
-          </div>
-
-          <a 
-            href={template.previewUrl} 
-            target="_blank" 
-            rel="noreferrer"
-            title="Open Fullscreen in New Window"
-            style={{
-              color: 'rgba(255, 255, 255, 0.6)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              background: 'rgba(255, 255, 255, 0.08)',
-              transition: 'all 0.2s'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <ExternalLink size={14} />
-          </a>
-        </div>
       </div>
 
-      {/* Card Content & Features */}
-      <div style={{ padding: 22, display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: 16 }}>
+      {/* Card Body */}
+      <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <p style={{ fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.55, marginBottom: 16 }}>
           {template.description}
         </p>
 
-        {/* Feature Checkmarks */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 18 }}>
+        {/* Key Features Minimalist List */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 18 }}>
           {template.keyFeatures.slice(0, 3).map((feat, idx) => (
             <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <CheckCircle2 size={14} color={activeColor} style={{ flexShrink: 0 }} />
+              <span style={{ width: 4, height: 4, borderRadius: '50%', background: activeColor, flexShrink: 0 }} />
               <span style={{ fontSize: 12, color: 'var(--text-main)', fontWeight: 500 }}>{feat}</span>
             </div>
           ))}
@@ -142,46 +122,40 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
           {template.techStack.map((tech) => (
             <span 
               key={tech}
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                color: 'var(--text-dim)',
-                background: 'rgba(255, 255, 255, 0.04)',
-                padding: '3px 8px',
-                borderRadius: 6,
-                border: '1px solid rgba(255, 255, 255, 0.05)'
-              }}
+              className="badge-mono"
+              style={{ fontSize: 10, padding: '2px 7px', color: 'var(--text-dim)' }}
             >
               {tech}
             </span>
           ))}
         </div>
 
-        {/* Action Buttons */}
-        <div style={{ marginTop: 'auto', display: 'flex', gap: 10 }}>
+        {/* Action Controls */}
+        <div style={{ marginTop: 'auto', display: 'flex', gap: 8 }}>
           <button
             onClick={() => onSelect(template)}
             className="btn-primary"
             style={{ 
               flex: 1, 
-              justifyContent: 'center', 
-              fontSize: 13,
-              background: `linear-gradient(135deg, ${activeColor}, #6366f1)`
+              padding: '9px 14px', 
+              fontSize: 12,
+              justifyContent: 'space-between'
             }}
           >
-            <Play size={14} fill="#ffffff" />
-            <span>Live Interactive Demo</span>
+            <span>Launch Live Simulator</span>
+            <ArrowUpRight size={14} />
           </button>
 
           <button
             onClick={() => onCustomize(template)}
             className="btn-secondary"
-            title="Pitch with Custom Client Brand"
+            title="Personalize Client Brand"
             style={{ padding: '9px 12px' }}
           >
-            <Sliders size={15} />
+            <SlidersHorizontal size={14} />
           </button>
         </div>
+
       </div>
     </div>
   );

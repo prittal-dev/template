@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, Sparkles, Sliders, ExternalLink, Laptop, Smartphone, Eye } from 'lucide-react';
+import { SlidersHorizontal, ArrowUpRight, Monitor, Eye } from 'lucide-react';
 
 export default function ShowcaseHeader({ 
   onOpenPersonalizer, 
@@ -12,11 +12,30 @@ export default function ShowcaseHeader({
   selectedTemplate
 }) {
   return (
-    <header className="glass-panel" style={{ position: 'sticky', top: 0, zIndex: 100, borderBottom: '1px solid var(--border-subtle)' }}>
-      <div style={{ maxWidth: 1440, margin: '0 auto', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
-        
-        {/* Brand / Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+    <header 
+      style={{ 
+        position: 'sticky', 
+        top: 0, 
+        zIndex: 100, 
+        background: 'rgba(8, 9, 13, 0.88)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        borderBottom: '1px solid var(--border-subtle)'
+      }}
+    >
+      <div 
+        style={{ 
+          maxWidth: 1440, 
+          margin: '0 auto', 
+          padding: '12px 24px', 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between', 
+          gap: 16 
+        }}
+      >
+        {/* Left: Studio Identity */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
           <div 
             onClick={() => setViewMode('catalog')}
             style={{ 
@@ -24,125 +43,125 @@ export default function ShowcaseHeader({
               alignItems: 'center', 
               gap: 10, 
               cursor: 'pointer',
-              textDecoration: 'none'
+              userSelect: 'none'
             }}
           >
-            <div style={{ 
-              width: 38, 
-              height: 38, 
-              borderRadius: 10, 
-              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)', 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              boxShadow: '0 4px 14px rgba(139, 92, 246, 0.4)'
-            }}>
-              <Layers size={20} color="#ffffff" />
+            <div 
+              style={{ 
+                width: 32, 
+                height: 32, 
+                borderRadius: 8, 
+                background: '#ffffff', 
+                color: '#08090d',
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                fontWeight: 800,
+                fontSize: 14,
+                letterSpacing: '-0.04em'
+              }}
+            >
+              AS
             </div>
+
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.02em', color: '#ffffff' }}>
-                  STUDIO<span style={{ color: '#8b5cf6' }}>SHOWCASE</span>
+                <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-0.02em', color: '#ffffff' }}>
+                  AGENCY STUDIO
                 </span>
-                <span style={{ 
-                  fontSize: 10, 
-                  fontWeight: 700, 
-                  background: 'rgba(139, 92, 246, 0.18)', 
-                  color: '#a78bfa', 
-                  padding: '2px 8px', 
-                  borderRadius: 999,
-                  border: '1px solid rgba(139, 92, 246, 0.3)'
-                }}>
-                  CLIENT DEMO HUB
+                <span className="badge-mono" style={{ fontSize: 10, padding: '2px 6px' }}>
+                  ATELIER v2
                 </span>
               </div>
-              <p style={{ fontSize: 11, color: 'var(--text-dim)', margin: 0 }}>
-                Live Brand Personalizer & Interactive Pitch Engine
-              </p>
             </div>
           </div>
+
+          <div 
+            style={{ 
+              width: 1, 
+              height: 20, 
+              background: 'var(--border-subtle)',
+              display: 'none'
+            }} 
+          />
         </div>
 
-        {/* Center: View Switcher or Active Template Info */}
+        {/* Center: View Switcher or Minimalist Category Filter */}
         {viewMode === 'studio' ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>Viewing:</span>
-            <span style={{ 
-              fontSize: 13, 
-              fontWeight: 600, 
-              color: '#ffffff',
-              background: 'rgba(255, 255, 255, 0.08)',
-              padding: '4px 12px',
-              borderRadius: 8,
-              border: '1px solid var(--border-subtle)'
-            }}>
-              {selectedTemplate ? selectedTemplate.title : 'Template Preview'}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 12, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+              Previewing:
+            </span>
+            <span 
+              style={{ 
+                fontSize: 13, 
+                fontWeight: 600, 
+                color: '#ffffff',
+                background: 'rgba(255, 255, 255, 0.05)',
+                padding: '4px 12px',
+                borderRadius: 7,
+                border: '1px solid var(--border-subtle)'
+              }}
+            >
+              {selectedTemplate ? selectedTemplate.title : 'Template'}
             </span>
           </div>
         ) : (
-          /* Filter Pills in Catalog Mode */
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, overflowX: 'auto', padding: '4px 0' }}>
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: 20,
-                  fontSize: 12,
-                  fontWeight: 600,
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  background: activeFilter === cat ? '#8b5cf6' : 'rgba(255, 255, 255, 0.05)',
-                  color: activeFilter === cat ? '#ffffff' : 'var(--text-muted)',
-                  boxShadow: activeFilter === cat ? '0 4px 12px rgba(139, 92, 246, 0.35)' : 'none'
-                }}
-              >
-                {cat}
-              </button>
-            ))}
+          <div className="segmented-deck" style={{ overflowX: 'auto', maxWidth: '55vw' }}>
+            {categories.map((cat) => {
+              const isActive = activeFilter === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveFilter(cat)}
+                  className={`segmented-item ${isActive ? 'active' : ''}`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
           </div>
         )}
 
-        {/* Right Actions */}
+        {/* Right: Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           {viewMode === 'studio' && (
             <button
               onClick={() => setViewMode('catalog')}
               className="btn-secondary"
-              style={{ fontSize: 13, padding: '8px 14px' }}
+              style={{ fontSize: 12, padding: '7px 12px' }}
             >
-              <Eye size={15} /> All Templates
+              <Eye size={14} /> Catalog
             </button>
           )}
 
-          {/* Personalize Button */}
+          {/* Personalize Client Brand Trigger */}
           <button
             onClick={onOpenPersonalizer}
-            className="btn-primary"
+            className="btn-secondary"
             style={{ 
-              fontSize: 13, 
-              padding: '8px 16px',
-              background: clientBrand.name 
-                ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' 
-                : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)'
+              fontSize: 12, 
+              padding: '7px 14px',
+              borderColor: clientBrand.name ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-subtle)',
+              background: clientBrand.name ? 'rgba(16, 185, 129, 0.08)' : 'rgba(255, 255, 255, 0.04)'
             }}
           >
-            <Sliders size={15} />
+            <SlidersHorizontal size={13} color={clientBrand.name ? '#10b981' : 'currentColor'} />
             {clientBrand.name ? (
-              <span>Brand: <strong>{clientBrand.name}</strong></span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                Client: <strong style={{ color: '#ffffff' }}>{clientBrand.name}</strong>
+                <span 
+                  style={{ 
+                    width: 7, 
+                    height: 7, 
+                    borderRadius: '50%', 
+                    background: clientBrand.color || '#10b981',
+                    display: 'inline-block'
+                  }} 
+                />
+              </span>
             ) : (
-              <span>Personalize for Client</span>
-            )}
-            {clientBrand.name && (
-              <span style={{ 
-                width: 8, 
-                height: 8, 
-                borderRadius: '50%', 
-                background: clientBrand.color || '#10b981',
-                boxShadow: `0 0 6px ${clientBrand.color || '#10b981'}`
-              }} />
+              <span>Personalize Brand</span>
             )}
           </button>
         </div>
