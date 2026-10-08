@@ -437,12 +437,95 @@
       });
     }
 
-    // 5. Floating Demo Watermark / Pill
-    updateDemoWatermark(name, primaryColor);
+    // 5. Dynamic Email & Address Updates
+    if (email && email.trim()) {
+      const mailLinks = document.querySelectorAll('a[href^="mailto:"]');
+      mailLinks.forEach((a) => {
+        a.href = `mailto:${email.trim()}`;
+        if (a.innerText && a.innerText.includes('@')) {
+          a.innerText = email.trim();
+        }
+      });
+    }
+
+    if (currentBrandData.address && currentBrandData.address.trim()) {
+      const addressEls = document.querySelectorAll('address, .footer-address, .contact-address, [data-brand="address"]');
+      addressEls.forEach((el) => {
+        el.innerText = currentBrandData.address.trim();
+      });
+    }
+
+      // 6. Dynamic Hero Text & Tagline Replacement
+      if (currentBrandData.heroHeading && currentBrandData.heroHeading.trim()) {
+        const h1s = document.querySelectorAll('h1');
+        h1s.forEach((h1) => {
+          if (!h1.closest('header') && !h1.closest('nav')) {
+            h1.innerText = currentBrandData.heroHeading.trim();
+          }
+        });
+      }
+
+      if (currentBrandData.heroSubheading && currentBrandData.heroSubheading.trim()) {
+        const subEls = document.querySelectorAll('.hero-subtitle, .hero-desc, .hero-p, [data-brand="subheading"]');
+        subEls.forEach((el) => {
+          el.innerText = currentBrandData.heroSubheading.trim();
+        });
+      }
+
+      if (tagline && tagline.trim()) {
+        const taglineEls = document.querySelectorAll('.brand-tagline, .hero-tagline, [data-brand="tagline"]');
+        taglineEls.forEach((el) => {
+          el.innerText = tagline.trim();
+        });
+      }
+
+      // 7. Dynamic Theme Mode (Dark / Clean Light)
+      if (currentBrandData.themeMode) {
+        document.documentElement.setAttribute('data-theme', currentBrandData.themeMode);
+        let themeStyleEl = document.getElementById('showcase-theme-mode-styles');
+        if (!themeStyleEl) {
+          themeStyleEl = document.createElement('style');
+          themeStyleEl.id = 'showcase-theme-mode-styles';
+          document.head.appendChild(themeStyleEl);
+        }
+
+        if (currentBrandData.themeMode === 'light') {
+          themeStyleEl.innerHTML = `
+            html[data-theme="light"], body.light-mode {
+              --bg-dark: #f8fafc !important;
+              --bg-color: #f8fafc !important;
+              --text-main: #0f172a !important;
+              --text-dim: #64748b !important;
+              background-color: #f8fafc !important;
+              color: #0f172a !important;
+            }
+            html[data-theme="light"] nav, html[data-theme="light"] header {
+              background: rgba(255, 255, 255, 0.92) !important;
+              border-color: rgba(0, 0, 0, 0.1) !important;
+            }
+            html[data-theme="light"] .glass-card, html[data-theme="light"] .product-card {
+              background: rgba(255, 255, 255, 0.8) !important;
+              border-color: rgba(0, 0, 0, 0.08) !important;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+            }
+          `;
+        } else {
+          themeStyleEl.innerHTML = `
+            html[data-theme="dark"] {
+              --bg-dark: #0a0d14 !important;
+              --text-main: #ffffff !important;
+              --text-dim: #94a3b8 !important;
+            }
+          `;
+        }
+      }
+
+      // 8. Floating Demo Watermark / Pill
+      updateDemoWatermark(name, primaryColor);
     } finally {
       setTimeout(() => {
         isMutatingInternal = false;
-      }, 50);
+      }, 150);
     }
   }
 
@@ -516,15 +599,17 @@
       const tagline = urlParams.get('tagline');
       const email = urlParams.get('email');
       const logoUrl = urlParams.get('logo');
+      const themeMode = urlParams.get('mode');
 
-      if (name || color || phone || tagline || email || logoUrl) {
+      if (name || color || phone || tagline || email || logoUrl || themeMode) {
         applyBranding({ 
           name, 
           primaryColor: color ? (color.startsWith('#') ? color : '#' + color) : '', 
           phone, 
           tagline, 
           email,
-          logoUrl
+          logoUrl,
+          themeMode
         });
       }
     } catch (e) {
@@ -538,24 +623,41 @@
     initFromUrl();
   }
 
+  let observerDebounceTimer = null;
+
   window.addEventListener('load', () => {
     initFromUrl();
+
+    // Guarded and throttled observer that CANNOT cause infinite recursion or CPU lag
     const observer = new MutationObserver(() => {
-      if (isMutatingInternal) return; // Prevent mutation recursion loops!
-      if (currentBrandData.name || currentBrandData.logoUrl) {
-        applyLogo(currentBrandData.logoUrl, currentBrandData.name, currentBrandData.primaryColor);
-      }
-      if (currentBrandData.name) {
-        const brandNameSpans = document.querySelectorAll(
-          '.brand-text-name, [data-brand="name"], .site-logo-text, .brand-title, .brand-name'
-        );
-        brandNameSpans.forEach((el) => {
-          el.innerHTML = `${currentBrandData.name.toUpperCase()}<sup>®</sup>`;
-        });
-        replaceTextInNode(document.body, currentBrandData.name);
-      }
+      if (isMutatingInternal) return; // Strict lock
+      if (!currentBrandData.name && !currentBrandData.logoUrl) return;
+
+      if (observerDebounceTimer) clearTimeout(observerDebounceTimer);
+      observerDebounceTimer = setTimeout(() => {
+        if (isMutatingInternal) return;
+        isMutatingInternal = true;
+        try {
+          if (currentBrandData.logoUrl || currentBrandData.name) {
+            applyLogo(currentBrandData.logoUrl, currentBrandData.name, currentBrandData.primaryColor);
+          }
+          if (currentBrandData.name) {
+            const brandNameSpans = document.querySelectorAll(
+              '.brand-text-name, [data-brand="name"], .site-logo-text, .brand-title, .brand-name'
+            );
+            brandNameSpans.forEach((el) => {
+              el.innerHTML = `${currentBrandData.name.toUpperCase()}<sup>®</sup>`;
+            });
+          }
+        } finally {
+          setTimeout(() => {
+            isMutatingInternal = false;
+          }, 200);
+        }
+      }, 400); // 400ms throttle
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+
+    observer.observe(document.body, { childList: true, subtree: false });
   });
 
   window.addEventListener('DOMContentLoaded', () => {

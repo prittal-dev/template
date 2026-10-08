@@ -271,17 +271,29 @@
     });
   }
 
+  let isMutatingInternal = false;
+  let brandingDebounceTimer = null;
+
   function applyBranding(data) {
     if (!data) return;
     currentBrandData = { ...currentBrandData, ...data };
-    const { name, tagline, primaryColor, phone, email, logoUrl } = currentBrandData;
+    if (brandingDebounceTimer) clearTimeout(brandingDebounceTimer);
+    brandingDebounceTimer = setTimeout(() => {
+      runApplyBranding();
+    }, 100);
+  }
 
-    // 1. Dynamic Logo & Brand Name in Navbar
-    if (logoUrl || (name && name.trim())) {
-      applyLogo(logoUrl, name, primaryColor);
-    } else {
-      restoreOriginalLogos();
-    }
+  function runApplyBranding() {
+    isMutatingInternal = true;
+    try {
+      const { name, tagline, primaryColor, phone, email, logoUrl } = currentBrandData;
+
+      // 1. Dynamic Logo & Brand Name in Navbar
+      if (logoUrl || (name && name.trim())) {
+        applyLogo(logoUrl, name, primaryColor);
+      } else {
+        restoreOriginalLogos();
+      }
 
     // 2. Comprehensive Dynamic Color Injection
     if (primaryColor) {
@@ -425,11 +437,102 @@
       });
     }
 
-    // 5. Floating Demo Watermark / Pill
-    updateDemoWatermark(name, primaryColor);
+    // 5. Dynamic Email & Address Updates
+    if (email && email.trim()) {
+      const mailLinks = document.querySelectorAll('a[href^="mailto:"]');
+      mailLinks.forEach((a) => {
+        a.href = `mailto:${email.trim()}`;
+        if (a.innerText && a.innerText.includes('@')) {
+          a.innerText = email.trim();
+        }
+      });
+    }
+
+    if (currentBrandData.address && currentBrandData.address.trim()) {
+      const addressEls = document.querySelectorAll('address, .footer-address, .contact-address, [data-brand="address"]');
+      addressEls.forEach((el) => {
+        el.innerText = currentBrandData.address.trim();
+      });
+    }
+
+      // 6. Dynamic Hero Text & Tagline Replacement
+      if (currentBrandData.heroHeading && currentBrandData.heroHeading.trim()) {
+        const h1s = document.querySelectorAll('h1');
+        h1s.forEach((h1) => {
+          if (!h1.closest('header') && !h1.closest('nav')) {
+            h1.innerText = currentBrandData.heroHeading.trim();
+          }
+        });
+      }
+
+      if (currentBrandData.heroSubheading && currentBrandData.heroSubheading.trim()) {
+        const subEls = document.querySelectorAll('.hero-subtitle, .hero-desc, .hero-p, [data-brand="subheading"]');
+        subEls.forEach((el) => {
+          el.innerText = currentBrandData.heroSubheading.trim();
+        });
+      }
+
+      if (tagline && tagline.trim()) {
+        const taglineEls = document.querySelectorAll('.brand-tagline, .hero-tagline, [data-brand="tagline"]');
+        taglineEls.forEach((el) => {
+          el.innerText = tagline.trim();
+        });
+      }
+
+      // 7. Dynamic Theme Mode (Dark / Clean Light)
+      if (currentBrandData.themeMode) {
+        document.documentElement.setAttribute('data-theme', currentBrandData.themeMode);
+        let themeStyleEl = document.getElementById('showcase-theme-mode-styles');
+        if (!themeStyleEl) {
+          themeStyleEl = document.createElement('style');
+          themeStyleEl.id = 'showcase-theme-mode-styles';
+          document.head.appendChild(themeStyleEl);
+        }
+
+        if (currentBrandData.themeMode === 'light') {
+          themeStyleEl.innerHTML = `
+            html[data-theme="light"], body.light-mode {
+              --bg-dark: #f8fafc !important;
+              --bg-color: #f8fafc !important;
+              --text-main: #0f172a !important;
+              --text-dim: #64748b !important;
+              background-color: #f8fafc !important;
+              color: #0f172a !important;
+            }
+            html[data-theme="light"] nav, html[data-theme="light"] header {
+              background: rgba(255, 255, 255, 0.92) !important;
+              border-color: rgba(0, 0, 0, 0.1) !important;
+            }
+            html[data-theme="light"] .glass-card, html[data-theme="light"] .product-card {
+              background: rgba(255, 255, 255, 0.8) !important;
+              border-color: rgba(0, 0, 0, 0.08) !important;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+            }
+          `;
+        } else {
+          themeStyleEl.innerHTML = `
+            html[data-theme="dark"] {
+              --bg-dark: #0a0d14 !important;
+              --text-main: #ffffff !important;
+              --text-dim: #94a3b8 !important;
+            }
+          `;
+        }
+      }
+
+      // 8. Floating Demo Watermark / Pill
+      updateDemoWatermark(name, primaryColor);
+    } finally {
+      setTimeout(() => {
+        isMutatingInternal = false;
+      }, 150);
+    }
   }
 
-  function updateDemoWatermark(name, color) {
+  let currentTier = 'basic';
+
+  function updateDemoWatermark(name, color, tier) {
+    if (tier) currentTier = tier;
     let badge = document.getElementById('showcase-demo-badge');
     if (!badge) {
       badge = document.createElement('div');
@@ -443,7 +546,7 @@
         align-items: center;
         gap: 8px;
         padding: 6px 14px;
-        background: rgba(15, 23, 42, 0.88);
+        background: rgba(15, 23, 42, 0.92);
         color: #ffffff;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         font-size: 11px;
@@ -461,17 +564,28 @@
 
     const brandLabel = name ? name : 'Template Preview';
     const accent = color || '#3b82f6';
+    const tierTag = currentTier.toUpperCase();
+    const tierBg = currentTier === 'premium' ? '#f43f5e' : currentTier === 'standard' ? '#eab308' : '#3b82f6';
+
     badge.innerHTML = `
-      <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${accent};box-shadow:0 0 8px ${accent};"></span>
+      <span style="display:inline-block;padding:2px 6px;border-radius:4px;background:${tierBg};color:#ffffff;font-size:9px;font-weight:800;letter-spacing:0.05em;">${tierTag}</span>
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${accent};box-shadow:0 0 8px ${accent};"></span>
       <span>${brandLabel}</span>
-      <span style="color:rgba(255,255,255,0.45);font-size:9px;text-transform:uppercase;">Live Demo</span>
+      <span style="color:rgba(255,255,255,0.45);font-size:9px;text-transform:uppercase;">Live Preview</span>
     `;
   }
 
   // Handle postMessage from Showcase Hub parent
   window.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'SHOWCASE_UPDATE_BRAND') {
-      applyBranding(event.data.payload);
+    if (event.data) {
+      if (event.data.type === 'SHOWCASE_UPDATE_BRAND') {
+        if (event.data.tier) currentTier = event.data.tier;
+        applyBranding(event.data.payload);
+      }
+      if (event.data.type === 'SHOWCASE_UPDATE_TIER') {
+        currentTier = event.data.tier || 'basic';
+        updateDemoWatermark(currentBrandData.name, currentBrandData.primaryColor, currentTier);
+      }
     }
   });
 
@@ -485,15 +599,17 @@
       const tagline = urlParams.get('tagline');
       const email = urlParams.get('email');
       const logoUrl = urlParams.get('logo');
+      const themeMode = urlParams.get('mode');
 
-      if (name || color || phone || tagline || email || logoUrl) {
+      if (name || color || phone || tagline || email || logoUrl || themeMode) {
         applyBranding({ 
           name, 
           primaryColor: color ? (color.startsWith('#') ? color : '#' + color) : '', 
           phone, 
           tagline, 
           email,
-          logoUrl
+          logoUrl,
+          themeMode
         });
       }
     } catch (e) {
@@ -507,23 +623,41 @@
     initFromUrl();
   }
 
+  let observerDebounceTimer = null;
+
   window.addEventListener('load', () => {
     initFromUrl();
+
+    // Guarded and throttled observer that CANNOT cause infinite recursion or CPU lag
     const observer = new MutationObserver(() => {
-      if (currentBrandData.name || currentBrandData.logoUrl) {
-        applyLogo(currentBrandData.logoUrl, currentBrandData.name, currentBrandData.primaryColor);
-      }
-      if (currentBrandData.name) {
-        const brandNameSpans = document.querySelectorAll(
-          '.brand-text-name, [data-brand="name"], .site-logo-text, .brand-title, .brand-name'
-        );
-        brandNameSpans.forEach((el) => {
-          el.innerHTML = `${currentBrandData.name.toUpperCase()}<sup>®</sup>`;
-        });
-        replaceTextInNode(document.body, currentBrandData.name);
-      }
+      if (isMutatingInternal) return; // Strict lock
+      if (!currentBrandData.name && !currentBrandData.logoUrl) return;
+
+      if (observerDebounceTimer) clearTimeout(observerDebounceTimer);
+      observerDebounceTimer = setTimeout(() => {
+        if (isMutatingInternal) return;
+        isMutatingInternal = true;
+        try {
+          if (currentBrandData.logoUrl || currentBrandData.name) {
+            applyLogo(currentBrandData.logoUrl, currentBrandData.name, currentBrandData.primaryColor);
+          }
+          if (currentBrandData.name) {
+            const brandNameSpans = document.querySelectorAll(
+              '.brand-text-name, [data-brand="name"], .site-logo-text, .brand-title, .brand-name'
+            );
+            brandNameSpans.forEach((el) => {
+              el.innerHTML = `${currentBrandData.name.toUpperCase()}<sup>®</sup>`;
+            });
+          }
+        } finally {
+          setTimeout(() => {
+            isMutatingInternal = false;
+          }, 200);
+        }
+      }, 400); // 400ms throttle
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+
+    observer.observe(document.body, { childList: true, subtree: false });
   });
 
   window.addEventListener('DOMContentLoaded', () => {

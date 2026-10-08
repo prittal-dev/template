@@ -117,9 +117,13 @@ export const SITE_CONFIG = {
     email: ${JSON.stringify(clientBrand.email || '')},
     address: ${JSON.stringify(clientBrand.address || '')},
     city: ${JSON.stringify(clientBrand.city || '')},
+    themeMode: ${JSON.stringify(clientBrand.themeMode || 'dark')},
     primaryColor: ${JSON.stringify(primaryColor)},
+    secondaryColor: ${JSON.stringify(clientBrand.secondaryColor || '#1e293b')},
+    accentColor: ${JSON.stringify(clientBrand.accentColor || primaryColor)},
     logoUrl: ${JSON.stringify(clientBrand.logoUrl || '')}
   },
+  content: ${JSON.stringify(project.content || {}, null, 2)},
   seo: {
     title: ${JSON.stringify(siteTitle)},
     description: ${JSON.stringify(siteDesc)}
@@ -131,11 +135,16 @@ export const SITE_CONFIG = {
   zip.file('src/config/siteConfig.js', siteConfigContent);
 
   // 6. Generate src/index.css
+  const isLight = clientBrand.themeMode === 'light';
   const indexCss = `/* Client Website Design System */
 :root {
   --primary: ${primaryColor};
-  --accent: ${template.accentColor || primaryColor};
-  --bg-dark: ${template.heroColor || '#0a0d14'};
+  --accent: ${clientBrand.accentColor || template.accentColor || primaryColor};
+  --bg-dark: ${isLight ? '#f8fafc' : (template.heroColor || '#0a0d14')};
+  --text-main: ${isLight ? '#0f172a' : '#f1f5f9'};
+  --text-muted: ${isLight ? '#64748b' : '#94a3b8'};
+  --card-bg: ${isLight ? '#ffffff' : 'rgba(255, 255, 255, 0.03)'};
+  --card-border: ${isLight ? 'rgba(0, 0, 0, 0.08)' : 'rgba(255, 255, 255, 0.08)'};
   --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
 
@@ -147,8 +156,8 @@ export const SITE_CONFIG = {
 
 body {
   font-family: var(--font-main);
-  background-color: #0b0f19;
-  color: #f1f5f9;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
   line-height: 1.6;
   overflow-x: hidden;
 }
@@ -235,8 +244,80 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   zip.file('src/main.jsx', mainJsx);
 
   // 8. Generate src/App.jsx
-  const appJsx = `import React from 'react';
+  const appJsx = `import React, { useState } from 'react';
 import { SITE_CONFIG } from './config/siteConfig';
+
+function ProductCard({ prod, client }) {
+  const images = (prod.images && prod.images.length > 0) ? prod.images : (prod.image ? [prod.image] : []);
+  const [activeImg, setActiveImg] = useState(prod.image || images[0] || '');
+
+  return (
+    <div className="product-card">
+      {activeImg && (
+        <div style={{ width: '100%', height: 200, borderRadius: 12, overflow: 'hidden', background: client.themeMode === 'light' ? '#f1f5f9' : '#070a13', marginBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <img src={activeImg} alt={prod.name || prod.title} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+        </div>
+      )}
+
+      {/* Interactive Multi-Image Gallery Thumbnails */}
+      {images.length > 1 && (
+        <div style={{ display: 'flex', gap: 6, marginBottom: 14, overflowX: 'auto', paddingBottom: 4 }}>
+          {images.map((imgUrl, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => setActiveImg(imgUrl)}
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: 8,
+                overflow: 'hidden',
+                padding: 0,
+                border: activeImg === imgUrl ? \`2px solid \${client.primaryColor}\` : '1px solid rgba(255, 255, 255, 0.15)',
+                background: '#070a13',
+                cursor: 'pointer',
+                flexShrink: 0
+              }}
+            >
+              <img src={imgUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {prod.chips && prod.chips.length > 0 && (
+        <div style={{ display: 'flex', gap: 6, marginBottom: 12, flexWrap: 'wrap' }}>
+          {prod.chips.map((c, i) => (
+            <span key={i} style={{ fontSize: 10, background: 'rgba(255,255,255,0.08)', padding: '2px 8px', borderRadius: 4 }}>{c}</span>
+          ))}
+        </div>
+      )}
+      <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 6 }}>{prod.name || prod.title}</h3>
+      <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 14, lineHeight: 1.5 }}>{prod.description}</p>
+      {prod.price && (
+        <div style={{ fontSize: 17, fontWeight: 800, color: client.primaryColor, marginBottom: 14 }}>{prod.price}</div>
+      )}
+      <a
+        href={\`https://wa.me/\${(client.whatsapp || '').replace(/[^0-9]/g, '')}?text=Inquiring%20about%20\${encodeURIComponent(prod.name || prod.title)}\`}
+        target="_blank"
+        rel="noreferrer"
+        style={{
+          display: 'block',
+          textAlign: 'center',
+          padding: '10px 16px',
+          borderRadius: 8,
+          background: 'rgba(255, 255, 255, 0.05)',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+          fontSize: 13,
+          fontWeight: 600,
+          color: client.primaryColor
+        }}
+      >
+        Request Quote &rarr;
+      </a>
+    </div>
+  );
+}
 
 export default function App() {
   const { client, products, seo } = SITE_CONFIG;
@@ -355,9 +436,36 @@ export default function App() {
         </div>
       </section>
 
-      {/* Products / Offerings Section */}
+      {/* About Us & Stats Section */}
+      <section style={{ padding: '80px 0', borderTop: '1px solid rgba(255, 255, 255, 0.05)', background: 'rgba(255, 255, 255, 0.01)' }}>
+        <div className="container">
+          <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center', marginBottom: 48 }}>
+            <span className="badge">Heritage & Excellence</span>
+            <h2 style={{ fontSize: 32, fontWeight: 800, margin: '12px 0 16px' }}>
+              {SITE_CONFIG.content?.aboutTitle || 'About Our Organization'}
+            </h2>
+            <p style={{ fontSize: 16, color: '#94a3b8', lineHeight: 1.7 }}>
+              {SITE_CONFIG.content?.aboutContent || client.description || client.tagline}
+            </p>
+          </div>
+
+          {/* Stats Counters */}
+          {SITE_CONFIG.content?.stats && SITE_CONFIG.content.stats.length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 20, textAlign: 'center' }}>
+              {SITE_CONFIG.content.stats.map((st, i) => (
+                <div key={i} style={{ padding: '24px 16px', borderRadius: 14, background: 'rgba(255, 255, 255, 0.02)', border: '1px solid rgba(255, 255, 255, 0.06)' }}>
+                  <div style={{ fontSize: 32, fontWeight: 900, color: client.primaryColor, marginBottom: 4 }}>{st.value}</div>
+                  <div style={{ fontSize: 12, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>{st.label}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Products / Offerings Section with Multiple Images Support */}
       {products && products.length > 0 && (
-        <section style={{ padding: '60px 0 100px', borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
+        <section style={{ padding: '80px 0 100px', borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
           <div className="container">
             <div style={{ textAlign: 'center', marginBottom: 48 }}>
               <span className="badge">Featured Catalog</span>
@@ -366,38 +474,7 @@ export default function App() {
             
             <div className="product-grid">
               {products.map((prod, idx) => (
-                <div key={prod.id || idx} className="product-card">
-                  {prod.chips && prod.chips.length > 0 && (
-                    <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
-                      {prod.chips.map((c, i) => (
-                        <span key={i} style={{ fontSize: 10, background: 'rgba(255,255,255,0.08)', padding: '2px 8px', borderRadius: 4 }}>{c}</span>
-                      ))}
-                    </div>
-                  )}
-                  <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>{prod.name || prod.title}</h3>
-                  <p style={{ fontSize: 14, color: '#94a3b8', marginBottom: 16, lineHeight: 1.5 }}>{prod.description}</p>
-                  {prod.price && (
-                    <div style={{ fontSize: 18, fontWeight: 800, color: client.primaryColor, marginBottom: 16 }}>{prod.price}</div>
-                  )}
-                  <a
-                    href={\`https://wa.me/\${(client.whatsapp || '').replace(/[^0-9]/g, '')}?text=Inquiring%20about%20\${encodeURIComponent(prod.name || prod.title)}\`}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      display: 'block',
-                      textAlign: 'center',
-                      padding: '10px 16px',
-                      borderRadius: 8,
-                      background: 'rgba(255, 255, 255, 0.05)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      fontSize: 13,
-                      fontWeight: 600,
-                      color: client.primaryColor
-                    }}
-                  >
-                    Request Quote &rarr;
-                  </a>
-                </div>
+                <ProductCard key={prod.id || idx} prod={prod} client={client} />
               ))}
             </div>
           </div>
