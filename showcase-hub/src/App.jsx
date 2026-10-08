@@ -28,6 +28,7 @@ export default function App() {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [wizardTemplate, setWizardTemplate] = useState(null);
   const [wizardProject, setWizardProject] = useState(null);
+  const [wizardInitialTab, setWizardInitialTab] = useState('business');
 
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('agency_theme') || 'dark';
@@ -118,8 +119,18 @@ export default function App() {
 
   // Handle Create Website wizard trigger from Template Card
   const handleCreateWebsite = (template) => {
-    setWizardTemplate(template);
+    setWizardTemplate(template || templates[0]);
     setWizardProject(null);
+    setWizardInitialTab('business');
+    setIsWizardOpen(true);
+  };
+
+  // Handle Opening the full form wizard for preferences & branding
+  const handleOpenPreferences = (template = null, tab = 'branding') => {
+    const targetTemplate = template || selectedTemplate || templates[0];
+    setWizardTemplate(targetTemplate);
+    setWizardProject(null);
+    setWizardInitialTab(tab);
     setIsWizardOpen(true);
   };
 
@@ -127,6 +138,7 @@ export default function App() {
   const handleEditProject = (project, template) => {
     setWizardTemplate(template);
     setWizardProject(project);
+    setWizardInitialTab('business');
     setIsWizardOpen(true);
   };
 
@@ -218,7 +230,7 @@ export default function App() {
         activeFilter={activeFilter}
         setActiveFilter={setActiveFilter}
         clientBrand={clientBrand}
-        onOpenPersonalizer={() => setIsPersonalizerOpen(true)}
+        onOpenPersonalizer={() => handleOpenPreferences(selectedTemplate || templates[0], 'branding')}
         viewMode={viewMode}
         setViewMode={setViewMode}
         selectedTemplate={selectedTemplate}
@@ -235,10 +247,7 @@ export default function App() {
             templates={templates}
             activeFilter={activeFilter}
             onSelectTemplate={handleSelectTemplate}
-            onOpenPersonalizer={(tmpl) => {
-              setSelectedTemplate(tmpl);
-              setIsPersonalizerOpen(true);
-            }}
+            onOpenPersonalizer={(tmpl) => handleOpenPreferences(tmpl, 'branding')}
             onCreateWebsite={handleCreateWebsite}
             onRefreshLibrary={handleRefreshLibrary}
             clientBrand={clientBrand}
@@ -269,7 +278,7 @@ export default function App() {
             onSelectTemplate={setSelectedTemplate}
             onBackToCatalog={() => setViewMode('catalog')}
             clientBrand={clientBrand}
-            onOpenPersonalizer={() => setIsPersonalizerOpen(true)}
+            onOpenPersonalizer={() => handleOpenPreferences(selectedTemplate, 'branding')}
             onOpenShareModal={() => setIsShareModalOpen(true)}
             onOpenInquiryModal={() => setIsInquiryModalOpen(true)}
             theme={theme}
@@ -295,15 +304,18 @@ export default function App() {
         </footer>
       )}
 
-      {/* Dynamic Client Information Wizard Modal */}
+      {/* Dynamic Client Information Wizard Modal — Full Comprehensive Form */}
       {isWizardOpen && (
         <ClientWizardModal
           isOpen={isWizardOpen}
           onClose={() => setIsWizardOpen(false)}
           template={wizardTemplate}
           initialProject={wizardProject}
+          initialBrand={clientBrand}
+          initialTab={wizardInitialTab}
           onSaveProject={handleSaveProjectRecord}
           onOpenPreview={handleOpenPreviewFromWizard}
+          onUpdateBrand={(updatedBrand) => setClientBrand(prev => ({ ...prev, ...updatedBrand }))}
           showToast={showToast}
         />
       )}

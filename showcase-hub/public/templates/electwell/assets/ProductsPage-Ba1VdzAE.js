@@ -1,0 +1,1 @@
+import{j as t,P as e}from"./index-B2KuqegM.js";import"./vendor-react-nf7bT_Uh.js";function a({onNavigate:s}){return t.jsx("div",{className:"page-container products-page",style:{paddingTop:"75px"},children:t.jsx(e,{onNavigate:s})})}export{a as default};

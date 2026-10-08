@@ -48,7 +48,12 @@ export default function StudioPreviewer({
             phone: clientBrand.phone || '',
             email: clientBrand.email || '',
             city: clientBrand.city || '',
-            logoUrl: clientBrand.logoUrl || ''
+            address: clientBrand.address || clientBrand.city || '',
+            logoUrl: clientBrand.logoUrl || '',
+            themeMode: clientBrand.themeMode || 'dark',
+            heroHeading: clientBrand.heroHeading || '',
+            heroSubheading: clientBrand.heroSubheading || '',
+            products: clientBrand.products || []
           }
         },
         '*'
@@ -80,6 +85,8 @@ export default function StudioPreviewer({
     if (clientBrand.color) url.searchParams.set('color', clientBrand.color.replace('#', ''));
     if (clientBrand.phone) url.searchParams.set('phone', clientBrand.phone);
     if (clientBrand.tagline) url.searchParams.set('tagline', clientBrand.tagline);
+    if (clientBrand.themeMode) url.searchParams.set('mode', clientBrand.themeMode);
+    if (clientBrand.heroHeading) url.searchParams.set('heroHeading', clientBrand.heroHeading);
     if (clientBrand.logoUrl && !clientBrand.logoUrl.startsWith('data:')) {
       url.searchParams.set('logo', clientBrand.logoUrl);
     }
@@ -224,10 +231,11 @@ export default function StudioPreviewer({
               {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
             </button>
 
-            {/* Personalize Button */}
+            {/* Preferences / Full Form Customizer Button */}
             <button
               onClick={onOpenPersonalizer}
               className="btn-secondary"
+              title="Open Full Website Builder & Preferences Form"
               style={{ 
                 fontSize: 12, 
                 padding: '6px 12px',
@@ -236,7 +244,7 @@ export default function StudioPreviewer({
               }}
             >
               <SlidersHorizontal size={13} color={clientBrand.name ? '#10b981' : 'currentColor'} />
-              <span>{clientBrand.name ? clientBrand.name : 'Personalize'}</span>
+              <span>{clientBrand.name ? clientBrand.name : 'Preferences'}</span>
               {clientBrand.name && (
                 <span 
                   style={{ 

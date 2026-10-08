@@ -274,7 +274,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Live Card Preview Mockup Window */
 .card-preview-viewport {
   width: 100%;
-  height: 210px;
+  height: 240px;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--border-subtle);
@@ -325,19 +325,17 @@ h1, h2, h3, h4, h5, h6 {
   flex: 1;
   position: relative;
   width: 100%;
+  height: calc(100% - 28px);
   overflow: hidden;
 }
 
 .card-scaled-iframe {
-  width: 1200px;
-  height: 750px;
-  transform: scale(0.28);
-  transform-origin: 0 0;
   pointer-events: none;
   border: none;
   position: absolute;
   top: 0;
   left: 0;
+  display: block;
 }
 
 /* Hover overlay on card preview */

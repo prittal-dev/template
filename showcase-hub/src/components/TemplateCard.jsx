@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ArrowUpRight, SlidersHorizontal, ExternalLink, PlusCircle, Sparkles } from 'lucide-react';
 
 export default function TemplateCard({ 
@@ -11,6 +11,33 @@ export default function TemplateCard({
   const isPersonalized = Boolean(clientBrand.name);
   const activeColor = clientBrand.color || template.accentColor;
   const [iframeLoaded, setIframeLoaded] = useState(false);
+
+  // Measure container dimensions for pixel-perfect edge-to-edge desktop preview scaling
+  const frameRef = useRef(null);
+  const [frameDimensions, setFrameDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    if (!frameRef.current) return;
+    const updateSize = () => {
+      if (frameRef.current) {
+        const { offsetWidth, offsetHeight } = frameRef.current;
+        if (offsetWidth > 0 && offsetHeight > 0) {
+          setFrameDimensions({ width: offsetWidth, height: offsetHeight });
+        }
+      }
+    };
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(frameRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  // Standard desktop viewport to simulate (1280px standard)
+  const virtualWidth = 1280;
+  // Calculate exact scale so the 1280px desktop site spans exactly 100% of the frame width
+  const scale = frameDimensions.width > 0 ? (frameDimensions.width / virtualWidth) : 0.32;
+  // Calculate height in virtual pixels so it spans exactly 100% of the frame height
+  const virtualHeight = frameDimensions.height > 0 ? Math.round(frameDimensions.height / scale) : 750;
 
   // Keep iframe src stable to prevent expensive iframe reloads while typing
   const cardIframeSrc = template.previewUrl;
@@ -76,6 +103,7 @@ export default function TemplateCard({
 
         {/* Live Scaled Iframe Viewport */}
         <div 
+          ref={frameRef}
           className="card-preview-frame"
           style={{
             background: template.heroColor ? `${template.heroColor}33` : '#0d1017'
@@ -108,6 +136,18 @@ export default function TemplateCard({
             loading="lazy"
             onLoad={() => setIframeLoaded(true)}
             className="card-scaled-iframe"
+            style={{
+              width: `${virtualWidth}px`,
+              height: `${virtualHeight}px`,
+              transform: `scale(${scale})`,
+              transformOrigin: '0 0',
+              pointerEvents: 'none',
+              border: 'none',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              display: 'block'
+            }}
           />
 
           {/* Interactive Hover Overlay */}
@@ -227,10 +267,17 @@ export default function TemplateCard({
             <button
               onClick={() => onCustomize(template)}
               className="btn-secondary"
-              title="Personalize Brand"
-              style={{ padding: '8px 12px' }}
+              title="Preferences & Full Customizer Form"
+              style={{ 
+                padding: '8px 14px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: 12
+              }}
             >
-              <SlidersHorizontal size={14} />
+              <SlidersHorizontal size={13} />
+              <span>Preferences</span>
             </button>
           </div>
         </div>

@@ -346,7 +346,12 @@ export default function ClientProjectsView({
                       <Edit3 size={13} /> Edit
                     </button>
                     <button
-                      onClick={() => onPreviewProject(tmpl, project.brand)}
+                      onClick={() => onPreviewProject(tmpl, {
+                        ...(project.brand || {}),
+                        products: project.products || [],
+                        heroHeading: project.content?.heroHeading,
+                        heroSubheading: project.content?.heroSubheading
+                      })}
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',

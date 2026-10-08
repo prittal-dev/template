@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Building2, Palette, Image as ImageIcon, ShoppingBag, 
   FileText, Search, X, Check, Save, Download, RefreshCw, 
@@ -24,13 +24,16 @@ export default function ClientWizardModal({
   onClose,
   template,
   initialProject = null,
+  initialBrand = null,
+  initialTab = 'business',
   onSaveProject,
   onOpenPreview,
+  onUpdateBrand,
   showToast
 }) {
   if (!isOpen || !template) return null;
 
-  const [activeTab, setActiveTab] = useState('business'); // 'business' | 'branding' | 'media' | 'products' | 'content' | 'seo'
+  const [activeTab, setActiveTab] = useState(initialTab || 'business'); // 'business' | 'branding' | 'media' | 'products' | 'content' | 'seo'
   const [isExporting, setIsExporting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -41,22 +44,46 @@ export default function ClientWizardModal({
 
   // Step 1 & 2: Brand & Theme Details
   const [brand, setBrand] = useState({
-    name: initialProject?.brand?.name || template.defaultBrand?.name || '',
-    tagline: initialProject?.brand?.tagline || template.defaultBrand?.tagline || '',
-    description: initialProject?.brand?.description || template.defaultBrand?.description || '',
-    industry: initialProject?.brand?.industry || template.industry || '',
-    email: initialProject?.brand?.email || template.defaultBrand?.email || '',
-    phone: initialProject?.brand?.phone || template.defaultBrand?.phone || '',
-    whatsapp: initialProject?.brand?.whatsapp || template.defaultBrand?.whatsapp || template.defaultBrand?.phone || '',
-    address: initialProject?.brand?.address || template.defaultBrand?.address || '',
-    city: initialProject?.brand?.city || template.defaultBrand?.city || '',
-    themeMode: initialProject?.brand?.themeMode || 'dark', // 'dark' | 'light'
-    color: initialProject?.brand?.color || template.accentColor || '#3b82f6',
-    secondaryColor: initialProject?.brand?.secondaryColor || '#1e293b',
-    accentColor: initialProject?.brand?.accentColor || template.accentColor || '#eab308',
-    bgColor: initialProject?.brand?.bgColor || (template.heroColor || '#090d16'),
-    logoUrl: initialProject?.brand?.logoUrl || ''
+    name: initialProject?.brand?.name || initialBrand?.name || template.defaultBrand?.name || '',
+    tagline: initialProject?.brand?.tagline || initialBrand?.tagline || template.defaultBrand?.tagline || '',
+    description: initialProject?.brand?.description || initialBrand?.description || template.defaultBrand?.description || '',
+    industry: initialProject?.brand?.industry || initialBrand?.industry || template.industry || '',
+    email: initialProject?.brand?.email || initialBrand?.email || template.defaultBrand?.email || '',
+    phone: initialProject?.brand?.phone || initialBrand?.phone || template.defaultBrand?.phone || '',
+    whatsapp: initialProject?.brand?.whatsapp || initialBrand?.whatsapp || initialBrand?.phone || template.defaultBrand?.whatsapp || '',
+    address: initialProject?.brand?.address || initialBrand?.address || template.defaultBrand?.address || '',
+    city: initialProject?.brand?.city || initialBrand?.city || template.defaultBrand?.city || '',
+    themeMode: initialProject?.brand?.themeMode || initialBrand?.themeMode || 'dark', // 'dark' | 'light'
+    color: initialProject?.brand?.color || initialBrand?.color || template.accentColor || '#3b82f6',
+    secondaryColor: initialProject?.brand?.secondaryColor || initialBrand?.secondaryColor || '#1e293b',
+    accentColor: initialProject?.brand?.accentColor || initialBrand?.accentColor || template.accentColor || '#eab308',
+    bgColor: initialProject?.brand?.bgColor || initialBrand?.bgColor || (template.heroColor || '#090d16'),
+    logoUrl: initialProject?.brand?.logoUrl || initialBrand?.logoUrl || ''
   });
+
+  // Keep state synchronized when opening or switching tabs
+  useEffect(() => {
+    if (isOpen) {
+      if (initialTab) {
+        setActiveTab(initialTab);
+      }
+      if (initialProject?.brand) {
+        setBrand(prev => ({ ...prev, ...initialProject.brand }));
+      } else if (initialBrand && (initialBrand.name || initialBrand.color)) {
+        setBrand(prev => ({
+          ...prev,
+          name: initialBrand.name || prev.name,
+          tagline: initialBrand.tagline || prev.tagline,
+          color: initialBrand.color || prev.color,
+          phone: initialBrand.phone || prev.phone,
+          whatsapp: initialBrand.whatsapp || initialBrand.phone || prev.whatsapp,
+          email: initialBrand.email || prev.email,
+          city: initialBrand.city || prev.city,
+          logoUrl: initialBrand.logoUrl || prev.logoUrl
+        }));
+      }
+    }
+  }, [isOpen, initialTab, initialProject, initialBrand]);
 
   // Step 3: Media Library
   const [mediaList, setMediaList] = useState(initialProject?.media || [
@@ -127,7 +154,8 @@ export default function ClientWizardModal({
       address: brand.address,
       logoUrl: brand.logoUrl,
       heroHeading: content.heroHeading,
-      heroSubheading: content.heroSubheading
+      heroSubheading: content.heroSubheading,
+      products: products || []
     };
 
     const iframes = document.querySelectorAll('iframe');
@@ -301,6 +329,7 @@ export default function ClientWizardModal({
     onSaveProject(projectRecord);
     setProjectId(projectRecord.id);
     broadcastPreviewUpdate();
+    onUpdateBrand?.(brand);
     showToast?.(`Project "${projectName}" saved successfully!`);
   };
 
@@ -399,7 +428,8 @@ export default function ClientWizardModal({
             <button
               onClick={() => {
                 broadcastPreviewUpdate();
-                onOpenPreview?.(template, brand);
+                onUpdateBrand?.(brand);
+                onOpenPreview?.(template, brand, products, content);
               }}
               style={{
                 display: 'inline-flex',

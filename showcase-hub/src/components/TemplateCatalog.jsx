@@ -203,8 +203,9 @@ export default function TemplateCatalog({
       <div 
         style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: 24 
+          gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))', 
+          gap: 24,
+          alignItems: 'stretch'
         }}
       >
         {filteredTemplates.map((template) => (
