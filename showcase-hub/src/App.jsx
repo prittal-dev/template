@@ -1,17 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { TEMPLATES, CATEGORIES } from './config/templates';
+import { TEMPLATES as INITIAL_TEMPLATES, CATEGORIES } from './config/templates';
 import ShowcaseHeader from './components/ShowcaseHeader';
 import TemplateCatalog from './components/TemplateCatalog';
 import StudioPreviewer from './components/StudioPreviewer';
 import BrandPersonalizer from './components/BrandPersonalizer';
 import SharePitchModal from './components/SharePitchModal';
 import InquiryModal from './components/InquiryModal';
+import ClientWizardModal from './components/ClientWizardModal';
+import ClientProjectsView from './components/ClientProjectsView';
+import { 
+  fetchProjects, 
+  saveProject, 
+  duplicateProject, 
+  deleteProject, 
+  refreshTemplatesDiscovery 
+} from './services/projectStore';
+import { exportStandaloneWebsite } from './services/exportEngine';
 
 export default function App() {
-  const [templates] = useState(TEMPLATES);
-  const [selectedTemplate, setSelectedTemplate] = useState(TEMPLATES[0]);
-  const [viewMode, setViewMode] = useState('catalog'); // 'catalog' | 'studio'
+  const [templates, setTemplates] = useState(INITIAL_TEMPLATES);
+  const [selectedTemplate, setSelectedTemplate] = useState(INITIAL_TEMPLATES[0]);
+  const [viewMode, setViewMode] = useState('catalog'); // 'catalog' | 'projects' | 'studio'
   const [activeFilter, setActiveFilter] = useState('All Templates');
+  const [projects, setProjects] = useState([]);
+  
+  // Wizard Modal State
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const [wizardTemplate, setWizardTemplate] = useState(null);
+  const [wizardProject, setWizardProject] = useState(null);
+
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('agency_theme') || 'dark';
   });
@@ -45,8 +62,17 @@ export default function App() {
     setToast({ show: true, message });
     setTimeout(() => {
       setToast({ show: false, message: '' });
-    }, 3000);
+    }, 3500);
   };
+
+  // Load client projects on start
+  useEffect(() => {
+    fetchProjects().then(data => {
+      if (Array.isArray(data)) {
+        setProjects(data);
+      }
+    });
+  }, []);
 
   // Inspect URL parameters on first load for direct pitch links
   useEffect(() => {
@@ -60,7 +86,7 @@ export default function App() {
     const logoParam = params.get('logo');
 
     if (templateParam) {
-      const match = TEMPLATES.find(t => t.id === templateParam);
+      const match = templates.find(t => t.id === templateParam);
       if (match) {
         setSelectedTemplate(match);
         setViewMode('studio');
@@ -81,17 +107,78 @@ export default function App() {
         showToast(`Loaded personalized preview for ${brandParam}!`);
       }
     }
-  }, []);
+  }, [templates]);
 
+  // Handle template selection for Live Simulator
   const handleSelectTemplate = (template) => {
     setSelectedTemplate(template);
     setViewMode('studio');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleOpenPersonalizerFor = (template) => {
+  // Handle Create Website wizard trigger from Template Card
+  const handleCreateWebsite = (template) => {
+    setWizardTemplate(template);
+    setWizardProject(null);
+    setIsWizardOpen(true);
+  };
+
+  // Handle Edit Project trigger from Projects Portfolio
+  const handleEditProject = (project, template) => {
+    setWizardTemplate(template);
+    setWizardProject(project);
+    setIsWizardOpen(true);
+  };
+
+  // Handle Save Project
+  const handleSaveProjectRecord = async (projectData) => {
+    const updated = await saveProject(projectData);
+    setProjects(updated);
+  };
+
+  // Handle Duplicate Project
+  const handleDuplicateProjectRecord = async (id) => {
+    const updated = await duplicateProject(id);
+    setProjects(updated);
+    showToast('Project duplicated successfully!');
+  };
+
+  // Handle Delete Project
+  const handleDeleteProjectRecord = async (id) => {
+    const updated = await deleteProject(id);
+    setProjects(updated);
+    showToast('Project deleted.');
+  };
+
+  // Handle Export Standalone ZIP
+  const handleExportProjectRecord = async (project, template) => {
+    showToast(`Generating standalone React package for ${project.name}...`);
+    try {
+      await exportStandaloneWebsite(project, template);
+      showToast('Standalone React project exported and downloaded as .ZIP!');
+    } catch (err) {
+      showToast('Export failed: ' + err.message);
+    }
+  };
+
+  // Refresh Template Library via Discovery Engine
+  const handleRefreshLibrary = async () => {
+    const discovered = await refreshTemplatesDiscovery();
+    if (discovered) {
+      setTemplates(discovered);
+      showToast(`Discovered ${discovered.length} templates across sources/`);
+    } else {
+      showToast('Templates up to date.');
+    }
+  };
+
+  // Open Live Preview from Wizard
+  const handleOpenPreviewFromWizard = (template, brandData) => {
     setSelectedTemplate(template);
-    setIsPersonalizerOpen(true);
+    setClientBrand(brandData);
+    setIsWizardOpen(false);
+    setViewMode('studio');
+    showToast(`Viewing live simulator for ${brandData.name || template.title}`);
   };
 
   return (
@@ -105,79 +192,119 @@ export default function App() {
           left: '50%',
           transform: 'translateX(-50%)',
           zIndex: 99999,
-          background: 'var(--bg-surface-elevated)',
-          color: 'var(--text-main)',
-          padding: '8px 18px',
-          borderRadius: 8,
-          border: '1px solid var(--border-medium)',
-          boxShadow: '0 12px 30px rgba(0, 0, 0, 0.2)',
+          background: 'var(--bg-surface-elevated, #10172a)',
+          color: 'var(--text-main, #ffffff)',
+          padding: '10px 20px',
+          borderRadius: 10,
+          border: '1px solid var(--border-medium, rgba(255, 255, 255, 0.15))',
+          boxShadow: '0 16px 36px rgba(0, 0, 0, 0.4)',
           backdropFilter: 'blur(16px)',
           WebkitBackdropFilter: 'blur(16px)',
-          fontSize: 12,
-          fontFamily: 'var(--font-mono)',
+          fontSize: 13,
+          fontWeight: 600,
           display: 'flex',
           alignItems: 'center',
-          gap: 8,
+          gap: 10,
           animation: 'fadeIn 0.2s ease-out'
         }}>
-          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }} />
           <span>{toast.message}</span>
         </div>
       )}
 
+      {/* Main Agency Header */}
+      <ShowcaseHeader
+        categories={CATEGORIES}
+        activeFilter={activeFilter}
+        setActiveFilter={setActiveFilter}
+        clientBrand={clientBrand}
+        onOpenPersonalizer={() => setIsPersonalizerOpen(true)}
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        selectedTemplate={selectedTemplate}
+        theme={theme}
+        toggleTheme={toggleTheme}
+        projectsCount={projects.length}
+        onCreateNew={() => handleCreateWebsite(templates[0])}
+      />
+
       {/* Main View Router */}
-      {viewMode === 'catalog' ? (
-        <>
-          <ShowcaseHeader
-            categories={CATEGORIES}
+      <main style={{ flexGrow: 1 }}>
+        {viewMode === 'catalog' && (
+          <TemplateCatalog
+            templates={templates}
             activeFilter={activeFilter}
-            setActiveFilter={setActiveFilter}
+            onSelectTemplate={handleSelectTemplate}
+            onOpenPersonalizer={(tmpl) => {
+              setSelectedTemplate(tmpl);
+              setIsPersonalizerOpen(true);
+            }}
+            onCreateWebsite={handleCreateWebsite}
+            onRefreshLibrary={handleRefreshLibrary}
+            clientBrand={clientBrand}
+          />
+        )}
+
+        {viewMode === 'projects' && (
+          <ClientProjectsView
+            projects={projects}
+            templates={templates}
+            onEditProject={handleEditProject}
+            onPreviewProject={(tmpl, brandData) => {
+              setSelectedTemplate(tmpl);
+              if (brandData) setClientBrand(brandData);
+              setViewMode('studio');
+            }}
+            onDuplicateProject={handleDuplicateProjectRecord}
+            onExportProject={handleExportProjectRecord}
+            onDeleteProject={handleDeleteProjectRecord}
+            onCreateNew={() => handleCreateWebsite(templates[0])}
+          />
+        )}
+
+        {viewMode === 'studio' && (
+          <StudioPreviewer
+            templates={templates}
+            activeTemplate={selectedTemplate}
+            onSelectTemplate={setSelectedTemplate}
+            onBackToCatalog={() => setViewMode('catalog')}
             clientBrand={clientBrand}
             onOpenPersonalizer={() => setIsPersonalizerOpen(true)}
-            viewMode={viewMode}
-            setViewMode={setViewMode}
-            selectedTemplate={selectedTemplate}
+            onOpenShareModal={() => setIsShareModalOpen(true)}
+            onOpenInquiryModal={() => setIsInquiryModalOpen(true)}
             theme={theme}
             toggleTheme={toggleTheme}
           />
+        )}
+      </main>
 
-          <main style={{ flexGrow: 1 }}>
-            <TemplateCatalog
-              templates={templates}
-              activeFilter={activeFilter}
-              onSelectTemplate={handleSelectTemplate}
-              onOpenPersonalizer={handleOpenPersonalizerFor}
-              clientBrand={clientBrand}
-            />
-          </main>
+      {/* Dashboard Footer */}
+      {viewMode !== 'studio' && (
+        <footer style={{
+          borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+          background: 'var(--bg-dark, #070a12)',
+          padding: '32px 24px',
+          textAlign: 'center',
+          fontSize: 12,
+          color: 'var(--text-dim, #64748b)',
+          fontFamily: 'var(--font-mono)'
+        }}>
+          <p style={{ margin: 0 }}>
+            AGENCY WEBSITE BUILDER & TEMPLATE STUDIO &copy; {new Date().getFullYear()} — BASIC, STANDARD &amp; PREMIUM ARCHITECTURE
+          </p>
+        </footer>
+      )}
 
-          {/* Catalog Footer */}
-          <footer style={{
-            borderTop: '1px solid var(--border-subtle)',
-            background: 'var(--bg-dark)',
-            padding: '32px 24px',
-            textAlign: 'center',
-            fontSize: 12,
-            color: 'var(--text-dim)',
-            fontFamily: 'var(--font-mono)'
-          }}>
-            <p style={{ margin: 0 }}>
-              AGENCY STUDIO ATELIER &copy; {new Date().getFullYear()} — HIGH-PERFORMANCE CLIENT PRESENTATION ENGINE
-            </p>
-          </footer>
-        </>
-      ) : (
-        <StudioPreviewer
-          templates={templates}
-          activeTemplate={selectedTemplate}
-          onSelectTemplate={setSelectedTemplate}
-          onBackToCatalog={() => setViewMode('catalog')}
-          clientBrand={clientBrand}
-          onOpenPersonalizer={() => setIsPersonalizerOpen(true)}
-          onOpenShareModal={() => setIsShareModalOpen(true)}
-          onOpenInquiryModal={() => setIsInquiryModalOpen(true)}
-          theme={theme}
-          toggleTheme={toggleTheme}
+      {/* Dynamic Client Information Wizard Modal */}
+      {isWizardOpen && (
+        <ClientWizardModal
+          isOpen={isWizardOpen}
+          onClose={() => setIsWizardOpen(false)}
+          template={wizardTemplate}
+          initialProject={wizardProject}
+          onSaveProject={handleSaveProjectRecord}
+          onOpenPreview={handleOpenPreviewFromWizard}
+          showToast={showToast}
         />
       )}
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SlidersHorizontal, Eye, Sun, Moon } from 'lucide-react';
+import { SlidersHorizontal, Eye, Sun, Moon, LayoutGrid, FolderKanban, RefreshCw, Plus } from 'lucide-react';
 
 export default function ShowcaseHeader({ 
   onOpenPersonalizer, 
@@ -11,7 +11,9 @@ export default function ShowcaseHeader({
   setViewMode,
   selectedTemplate,
   theme,
-  toggleTheme
+  toggleTheme,
+  projectsCount = 0,
+  onCreateNew
 }) {
   return (
     <header 
@@ -19,10 +21,10 @@ export default function ShowcaseHeader({
         position: 'sticky', 
         top: 0, 
         zIndex: 100, 
-        background: 'var(--header-bg)',
+        background: 'var(--header-bg, #090d16)',
         backdropFilter: 'blur(16px)',
         WebkitBackdropFilter: 'blur(16px)',
-        borderBottom: '1px solid var(--border-subtle)',
+        borderBottom: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
         transition: 'background-color 0.25s ease'
       }}
     >
@@ -37,8 +39,8 @@ export default function ShowcaseHeader({
           gap: 16 
         }}
       >
-        {/* Left: Studio Identity */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+        {/* Left: Brand Identity */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <div 
             onClick={() => setViewMode('catalog')}
             style={{ 
@@ -51,57 +53,102 @@ export default function ShowcaseHeader({
           >
             <div 
               style={{ 
-                width: 32, 
-                height: 32, 
-                borderRadius: 8, 
-                background: 'var(--btn-primary-bg)', 
-                color: 'var(--btn-primary-text)',
+                width: 34, 
+                height: 34, 
+                borderRadius: 10, 
+                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', 
+                color: '#ffffff',
                 display: 'flex', 
                 alignItems: 'center', 
                 justifyContent: 'center',
-                fontWeight: 800,
-                fontSize: 14,
-                letterSpacing: '-0.04em'
+                fontWeight: 900,
+                fontSize: 15,
+                letterSpacing: '-0.04em',
+                boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
               }}
             >
-              AS
+              WB
             </div>
 
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 15, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
-                  AGENCY STUDIO
+                <span style={{ fontSize: 16, fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main, #ffffff)' }}>
+                  AGENCY BUILDER
                 </span>
-                <span className="badge-mono" style={{ fontSize: 10, padding: '2px 6px' }}>
-                  ATELIER v2
+                <span className="badge-mono" style={{ fontSize: 10, padding: '2px 6px', background: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa' }}>
+                  STUDIO v3
                 </span>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Center: View Switcher or Minimalist Category Filter */}
-        {viewMode === 'studio' ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 12, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
-              Previewing:
-            </span>
-            <span 
-              style={{ 
-                fontSize: 13, 
-                fontWeight: 600, 
-                color: 'var(--text-main)',
-                background: 'var(--bg-input)',
-                padding: '4px 12px',
-                borderRadius: 7,
-                border: '1px solid var(--border-subtle)'
+          {/* Navigation Mode Switcher: Catalog vs Client Projects */}
+          <div style={{
+            display: 'flex',
+            background: 'rgba(255, 255, 255, 0.04)',
+            padding: 3,
+            borderRadius: 10,
+            border: '1px solid rgba(255, 255, 255, 0.08)'
+          }}>
+            <button
+              onClick={() => setViewMode('catalog')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 14px',
+                borderRadius: 8,
+                background: viewMode === 'catalog' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                color: viewMode === 'catalog' ? '#ffffff' : '#94a3b8',
+                border: 'none',
+                fontSize: 12,
+                fontWeight: viewMode === 'catalog' ? 700 : 500,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
               }}
             >
-              {selectedTemplate ? selectedTemplate.title : 'Template'}
-            </span>
+              <LayoutGrid size={14} />
+              <span>Template Library</span>
+            </button>
+
+            <button
+              onClick={() => setViewMode('projects')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '6px 14px',
+                borderRadius: 8,
+                background: viewMode === 'projects' ? 'rgba(255, 255, 255, 0.12)' : 'transparent',
+                color: viewMode === 'projects' ? '#ffffff' : '#94a3b8',
+                border: 'none',
+                fontSize: 12,
+                fontWeight: viewMode === 'projects' ? 700 : 500,
+                cursor: 'pointer',
+                transition: 'all 0.2s'
+              }}
+            >
+              <FolderKanban size={14} />
+              <span>Client Projects</span>
+              {projectsCount > 0 && (
+                <span style={{
+                  padding: '1px 6px',
+                  borderRadius: 9999,
+                  background: '#3b82f6',
+                  color: '#ffffff',
+                  fontSize: 10,
+                  fontWeight: 800
+                }}>
+                  {projectsCount}
+                </span>
+              )}
+            </button>
           </div>
-        ) : (
-          <div className="segmented-deck" style={{ overflowX: 'auto', maxWidth: '55vw' }}>
+        </div>
+
+        {/* Center: Template Category Filter in Catalog Mode */}
+        {viewMode === 'catalog' && (
+          <div className="segmented-deck" style={{ overflowX: 'auto', maxWidth: '40vw' }}>
             {categories.map((cat) => {
               const isActive = activeFilter === cat;
               return (
@@ -117,9 +164,30 @@ export default function ShowcaseHeader({
           </div>
         )}
 
+        {viewMode === 'studio' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 12, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 600 }}>
+              Live Simulator:
+            </span>
+            <span 
+              style={{ 
+                fontSize: 13, 
+                fontWeight: 600, 
+                color: 'var(--text-main)',
+                background: 'var(--bg-input)',
+                padding: '4px 12px',
+                borderRadius: 7,
+                border: '1px solid var(--border-subtle)'
+              }}
+            >
+              {selectedTemplate ? selectedTemplate.title : 'Template'}
+            </span>
+          </div>
+        )}
+
         {/* Right: Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {/* Theme Toggle Button (Dark / Light) */}
+          {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
             className="theme-toggle-btn"
@@ -134,39 +202,30 @@ export default function ShowcaseHeader({
               className="btn-secondary"
               style={{ fontSize: 12, padding: '7px 12px' }}
             >
-              <Eye size={14} /> Catalog
+              <Eye size={14} /> Back to Catalog
             </button>
           )}
 
-          {/* Personalize Client Brand Trigger */}
-          <button
-            onClick={onOpenPersonalizer}
-            className="btn-secondary"
-            style={{ 
-              fontSize: 12, 
-              padding: '7px 14px',
-              borderColor: clientBrand.name ? 'rgba(16, 185, 129, 0.4)' : 'var(--border-subtle)',
-              background: clientBrand.name ? 'rgba(16, 185, 129, 0.08)' : 'var(--bg-input)'
-            }}
-          >
-            <SlidersHorizontal size={13} color={clientBrand.name ? '#10b981' : 'currentColor'} />
-            {clientBrand.name ? (
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                Client: <strong>{clientBrand.name}</strong>
-                <span 
-                  style={{ 
-                    width: 7, 
-                    height: 7, 
-                    borderRadius: '50%', 
-                    background: clientBrand.color || '#10b981',
-                    display: 'inline-block'
-                  }} 
-                />
-              </span>
-            ) : (
-              <span>Personalize Brand</span>
-            )}
-          </button>
+          {onCreateNew && (
+            <button
+              onClick={onCreateNew}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '8px 14px',
+                borderRadius: 8,
+                background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                color: '#ffffff',
+                border: 'none',
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: 'pointer'
+              }}
+            >
+              <Plus size={14} /> New Website
+            </button>
+          )}
         </div>
 
       </div>

@@ -4,8 +4,9 @@
   "private": true,
   "description": "Agency Template Studio & Client Live Pitch Engine",
   "scripts": {
-    "dev": "cd showcase-hub && npm run dev",
+    "discover": "node scripts/discover-templates.mjs",
+    "dev": "node scripts/discover-templates.mjs && cd showcase-hub && npm run dev",
     "sync": "node scripts/sync-templates.mjs",
-    "build": "node scripts/sync-templates.mjs && cd showcase-hub && npm run build"
+    "build": "node scripts/discover-templates.mjs && node scripts/sync-templates.mjs && cd showcase-hub && npm run build"
   }
 }

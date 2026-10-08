@@ -1,0 +1,106 @@
+[
+  {
+    "id": "proj_padma_001",
+    "name": "Apex Power & Cable Utilities",
+    "clientName": "Apex Infrastructure Ltd",
+    "templateId": "padmacables",
+    "tier": "basic",
+    "status": "Ready",
+    "createdAt": "2026-10-01T10:00:00.000Z",
+    "updatedAt": "2026-10-07T14:30:00.000Z",
+    "brand": {
+      "name": "Apex Conductor Utilities",
+      "tagline": "Powering Mega Utilities & Industrial Grids",
+      "color": "#eab308",
+      "phone": "+91 98234 56789",
+      "whatsapp": "+91 98234 56789",
+      "email": "contact@apexconductors.com",
+      "address": "Apex Towers, GIDC Industrial Estate, Vadodara, Gujarat",
+      "city": "Vadodara, Gujarat"
+    },
+    "seo": {
+      "title": "Apex Conductor Utilities — High-Voltage Industrial Power Cables",
+      "description": "Leading manufacturer of IS certified high-tension aluminum & copper power cables, control cables, and utility harnesses.",
+      "keywords": "power cables, industrial cables, conductor manufacturer, XLPE cables"
+    },
+    "products": [
+      {
+        "id": "prod_1",
+        "name": "Heavy Duty Armoured Power Cable",
+        "slug": "armoured-power-cable",
+        "description": "High tension 1.1kV cross-linked polyethylene armoured cable designed for underground power distribution.",
+        "chips": ["1.1kV", "Armoured", "IS 7098"],
+        "category": "Power Cables"
+      },
+      {
+        "id": "prod_2",
+        "name": "FR-LSH Multicore Control Cable",
+        "slug": "control-cable",
+        "description": "Flame retardant low smoke halogen-free multi-core copper control cable for utility automation.",
+        "chips": ["FR-LSH", "Shielded", "Instrumentation"],
+        "category": "Control Cables"
+      }
+    ]
+  },
+  {
+    "id": "proj_plaza_002",
+    "name": "Vogue Atelier & Timepieces",
+    "clientName": "Vogue Horology Atelier",
+    "templateId": "plazaclock",
+    "tier": "standard",
+    "status": "Draft",
+    "createdAt": "2026-10-03T11:20:00.000Z",
+    "updatedAt": "2026-10-06T18:15:00.000Z",
+    "brand": {
+      "name": "Vogue Horology Atelier",
+      "tagline": "Curated Timeless Gifting for Executive Boardrooms",
+      "color": "#E6C378",
+      "phone": "+91 98111 22334",
+      "whatsapp": "+91 98111 22334",
+      "email": "concierge@vogueatelier.com",
+      "address": "Level 14, Signature Tower, Bandra Kurla Complex, Mumbai",
+      "city": "Mumbai"
+    },
+    "seo": {
+      "title": "Vogue Horology Atelier — Bespoke Timepieces & Corporate Executive Gifting",
+      "description": "Artisanal horological gifts and custom desktop clock sculptures for luxury hospitality and corporate boardrooms."
+    },
+    "products": []
+  },
+  {
+    "id": "proj_yw_003",
+    "name": "WonderWheels Kids Mobility",
+    "clientName": "WonderWheels Toys Pvt Ltd",
+    "templateId": "youngwheels",
+    "tier": "premium",
+    "status": "Ready",
+    "createdAt": "2026-10-05T09:15:00.000Z",
+    "updatedAt": "2026-10-08T09:45:00.000Z",
+    "brand": {
+      "name": "WonderWheels Toys",
+      "tagline": "Safe Rides, Big Smiles • Premium Kids Mobility",
+      "color": "#f43f5e",
+      "phone": "+91 99100 88776",
+      "whatsapp": "+91 99100 88776",
+      "email": "hello@wonderwheelstoys.com",
+      "address": "Toy Park, Sector 4, Bawana Industrial Area, Delhi - 110039",
+      "city": "Delhi, India"
+    },
+    "seo": {
+      "title": "WonderWheels Toys — BIS Certified Kids Ride-On Cars & Scooters",
+      "description": "India's trusted manufacturer of safe, ergonomic, and cheerful ride-on toys, kick scooters, and baby walkers."
+    },
+    "products": [
+      {
+        "id": "yw_1",
+        "name": "Wonder Cruiser Supercar Ride-On",
+        "modelCode": "WC-900",
+        "category": "ride-ons",
+        "tagline": "Ergonomic push-car with LED lights and safety backrest",
+        "ageRange": "1-4 Years",
+        "price": "₹1,899",
+        "isBestSeller": true
+      }
+    ]
+  }
+]

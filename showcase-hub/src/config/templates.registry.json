@@ -1,0 +1,489 @@
+{
+  "updatedAt": "2026-10-08T05:13:44.778Z",
+  "totalTemplates": 4,
+  "tiers": {
+    "basic": 2,
+    "standard": 1,
+    "premium": 1
+  },
+  "templates": [
+    {
+      "id": "electwell",
+      "title": "Electwell Industrial Engineering",
+      "shortName": "Electwell",
+      "tagline": "Precision Engineered Industrial Process Fans & Heavy Blowers",
+      "tier": "basic",
+      "tierLabel": "Basic Website",
+      "category": "Heavy Engineering",
+      "industry": "Industrial Equipment / Manufacturing",
+      "badge": "B2B Enterprise",
+      "rating": 4.95,
+      "completionTime": "2-4 Days",
+      "heroColor": "#0c2340",
+      "accentColor": "#f97316",
+      "previewUrl": "/templates/electwell/",
+      "description": "Heavy industrial B2B manufacturing portal engineered for high credibility. Highlights technical centrifugal specs, air pollution control, ISO standards, and multi-parameter RFQ inquiry flows.",
+      "keyFeatures": [
+        "Industrial Product Specification Tables",
+        "Centrifugal & Axial Fan Dynamic Catalog",
+        "Air Pollution Control Process Deep-Dives",
+        "B2B RFQ Lead Generation Funnel",
+        "High-Heat Blue & Engineering Orange Accents",
+        "Client Trust Logos & Certification Badges"
+      ],
+      "techStack": [
+        "React 18",
+        "Vite",
+        "React Router",
+        "Modern CSS System",
+        "Lucide Icons"
+      ],
+      "routes": [
+        {
+          "path": "/",
+          "name": "Home"
+        },
+        {
+          "path": "/about",
+          "name": "About Us"
+        },
+        {
+          "path": "/products",
+          "name": "Products"
+        },
+        {
+          "path": "/infrastructure",
+          "name": "Infrastructure & Turnkey"
+        },
+        {
+          "path": "/gallery",
+          "name": "Plant Gallery"
+        },
+        {
+          "path": "/exports",
+          "name": "Global Exports"
+        },
+        {
+          "path": "/clients",
+          "name": "Our Clients"
+        },
+        {
+          "path": "/contact",
+          "name": "Contact & RFQ"
+        }
+      ],
+      "hasProducts": true,
+      "hasServices": true,
+      "defaultBrand": {
+        "name": "Electwell Engineers",
+        "tagline": "Industrial Fans Manufacturer Since 1992",
+        "description": "Premier manufacturer of heavy-duty industrial centrifugal fans, axial blowers, and air handling plants.",
+        "color": "#f97316",
+        "phone": "+91 98711 54321",
+        "whatsapp": "+91 98711 54321",
+        "email": "sales@electwellengineers.com",
+        "address": "B-48, Sector 57, Industrial Area, Noida / Ghaziabad NCR, India",
+        "city": "Ghaziabad & Delhi NCR"
+      },
+      "contentSchema": {
+        "allowCustomProducts": true,
+        "productFields": [
+          "name",
+          "slug",
+          "description",
+          "category",
+          "specifications",
+          "image"
+        ],
+        "sections": [
+          {
+            "id": "hero",
+            "title": "Hero Section",
+            "fields": [
+              {
+                "id": "heading",
+                "label": "Hero Headline",
+                "type": "text",
+                "default": "Precision Industrial Process Fans & Heavy Duty Blowers"
+              },
+              {
+                "id": "subheading",
+                "label": "Hero Subtitle",
+                "type": "textarea",
+                "default": "Custom engineered aerodynamic airflow solutions for cement, steel, thermal and chemical processing."
+              },
+              {
+                "id": "ctaText",
+                "label": "Primary CTA Label",
+                "type": "text",
+                "default": "Request RFQ Quote"
+              }
+            ]
+          }
+        ]
+      },
+      "sourcePath": "E:\\template\\sources\\jagmohan"
+    },
+    {
+      "id": "padmacables",
+      "title": "Padma Cable Infrastructure",
+      "shortName": "Padma Cables",
+      "tagline": "Engineered Conductors for Critical Power Infrastructure",
+      "tier": "basic",
+      "tierLabel": "Basic Website",
+      "category": "Infrastructure & Tech",
+      "industry": "High-Voltage Power & Electrical Cables",
+      "badge": "Critical Infrastructure",
+      "rating": 4.96,
+      "completionTime": "2-3 Days",
+      "heroColor": "#0a0d14",
+      "accentColor": "#eab308",
+      "previewUrl": "/templates/padmacables/",
+      "description": "Government and utility-grade digital showroom showcasing high-tension power cables, automotive harnesses, and multi-core conductors with Lenis smooth physics and technical blueprints.",
+      "keyFeatures": [
+        "Lenis Fluid Kinetic Scrolling",
+        "High-Tension Conductor Blueprint Cards",
+        "Interactive Technical Spec Sheets",
+        "Oswald & IBM Plex Mono Engineering Typography",
+        "Safety Gold & Dark Slate Contrast System",
+        "Instant WhatsApp Spec Sheet Request"
+      ],
+      "techStack": [
+        "React 18",
+        "Vite",
+        "Lenis Scroll",
+        "Custom CSS Grid",
+        "Lucide Icons"
+      ],
+      "routes": [
+        {
+          "path": "/",
+          "name": "Home"
+        },
+        {
+          "path": "/about",
+          "name": "About Us"
+        },
+        {
+          "path": "/products",
+          "name": "Our Products"
+        },
+        {
+          "path": "/manufacturing",
+          "name": "Manufacturing"
+        },
+        {
+          "path": "/industries",
+          "name": "Industries"
+        },
+        {
+          "path": "/contact",
+          "name": "Contact Us"
+        }
+      ],
+      "hasProducts": true,
+      "hasServices": true,
+      "defaultBrand": {
+        "name": "Padma Cable",
+        "tagline": "Conductors for Critical Infrastructure",
+        "description": "Leading PVC wire and cable manufacturer since 1989. Trusted by over 650,000 customers across India.",
+        "color": "#eab308",
+        "phone": "+91-9210084381",
+        "whatsapp": "+91-9210084381",
+        "email": "padmacable@gmail.com",
+        "address": "Plot No. 54, Ground Floor, Pkt-B, Sec-4, Bawana DSIDC City, Delhi – 110039, India",
+        "city": "New Delhi, India"
+      },
+      "contentSchema": {
+        "allowCustomProducts": true,
+        "productFields": [
+          "name",
+          "slug",
+          "description",
+          "chips",
+          "specifications",
+          "applications",
+          "image"
+        ],
+        "sections": [
+          {
+            "id": "hero",
+            "title": "Hero Section",
+            "fields": [
+              {
+                "id": "heading",
+                "label": "Hero Headline",
+                "type": "text",
+                "default": "Engineered Conductors for Critical Power Infrastructure"
+              },
+              {
+                "id": "subheading",
+                "label": "Hero Subtitle",
+                "type": "textarea",
+                "default": "High conductivity copper & aluminum power cables manufactured to IS standards."
+              },
+              {
+                "id": "ctaText",
+                "label": "Primary CTA Label",
+                "type": "text",
+                "default": "Explore Products"
+              }
+            ]
+          },
+          {
+            "id": "about",
+            "title": "About Section",
+            "fields": [
+              {
+                "id": "title",
+                "label": "About Title",
+                "type": "text",
+                "default": "Three Decades of Engineering Excellence"
+              },
+              {
+                "id": "content",
+                "label": "About Text",
+                "type": "textarea",
+                "default": "Padma Cable Industries Pvt. Ltd. was founded in 1989 to engineer the highest standard PVC wires and industrial cables."
+              }
+            ]
+          }
+        ]
+      },
+      "sourcePath": "E:\\template\\sources\\padmacables"
+    },
+    {
+      "id": "plazaclock",
+      "title": "Plaza Quartz & Atelier",
+      "shortName": "Plaza Clock",
+      "tagline": "Timeless Luxury Horology & Bespoke Corporate Gifting",
+      "tier": "standard",
+      "tierLabel": "Standard Website",
+      "category": "Luxury & Atelier",
+      "industry": "Luxury Horology / Corporate Gifting",
+      "badge": "Luxury Atelier",
+      "rating": 4.98,
+      "completionTime": "3-5 Days",
+      "heroColor": "#4A1535",
+      "accentColor": "#E6C378",
+      "previewUrl": "/templates/plazaclock/",
+      "description": "Ultra-luxury e-commerce atelier design featuring Aubergine/Plum backdrops, Warm Gold accents, Cormorant Garamond typography, 0% image crop containers, and smooth scroll interactions.",
+      "keyFeatures": [
+        "Locomotive Smooth Physics Scroll",
+        "Compact Atelier Layout Ratios",
+        "Interactive Corporate Catalog Mockup",
+        "Zero-Crop Luxury Product Showcases",
+        "High-Contrast Ivory Navigation",
+        "Instant Quote / Inquire Modal"
+      ],
+      "techStack": [
+        "React 18",
+        "Tailwind CSS",
+        "Framer Motion",
+        "Locomotive Scroll",
+        "Lucide Icons"
+      ],
+      "routes": [
+        {
+          "path": "/",
+          "name": "Home"
+        },
+        {
+          "path": "/about",
+          "name": "Atelier Heritage"
+        },
+        {
+          "path": "/catalogue",
+          "name": "Master Catalogue"
+        },
+        {
+          "path": "/collections",
+          "name": "Curated Collections"
+        },
+        {
+          "path": "/wall-clocks",
+          "name": "Wall Clocks"
+        },
+        {
+          "path": "/table-clocks",
+          "name": "Table Clocks"
+        },
+        {
+          "path": "/contact",
+          "name": "Concierge / Contact"
+        }
+      ],
+      "hasProducts": true,
+      "hasServices": true,
+      "defaultBrand": {
+        "name": "Plaza Enterprises",
+        "tagline": "Timeless Gifting for Discerning Brands",
+        "description": "Bespoke corporate gifting atelier crafting precision quartz clocks and executive desktop collections since 1982.",
+        "color": "#E6C378",
+        "phone": "+91 98100 12345",
+        "whatsapp": "+91 98100 12345",
+        "email": "concierge@plazaquartz.com",
+        "address": "Atelier Suite 402, Nariman Point, Mumbai & Connaught Place, New Delhi",
+        "city": "Delhi & Mumbai"
+      },
+      "contentSchema": {
+        "allowCustomProducts": true,
+        "productFields": [
+          "name",
+          "category",
+          "price",
+          "description",
+          "image",
+          "modelCode"
+        ],
+        "sections": [
+          {
+            "id": "hero",
+            "title": "Hero Section",
+            "fields": [
+              {
+                "id": "heading",
+                "label": "Hero Headline",
+                "type": "text",
+                "default": "Timeless Precision Crafted for Discerning Spaces"
+              },
+              {
+                "id": "subheading",
+                "label": "Hero Subtitle",
+                "type": "textarea",
+                "default": "Discover our signature horological timepieces and bespoke corporate collections."
+              },
+              {
+                "id": "ctaText",
+                "label": "Primary CTA Label",
+                "type": "text",
+                "default": "Explore Atelier Catalogue"
+              }
+            ]
+          }
+        ]
+      },
+      "sourcePath": "E:\\template\\sources\\demo_plazaclock"
+    },
+    {
+      "id": "youngwheels",
+      "title": "Young Wheels Consumer Goods",
+      "shortName": "Young Wheels",
+      "tagline": "Premier Kids Toys & Ride-Ons Manufacturer & Exporter",
+      "tier": "premium",
+      "tierLabel": "Premium Website",
+      "category": "Consumer & Retail",
+      "industry": "Consumer Goods / Kids Toys & Mobility",
+      "badge": "High-Converting Retail",
+      "rating": 4.99,
+      "completionTime": "3-5 Days",
+      "heroColor": "#1e1b4b",
+      "accentColor": "#f43f5e",
+      "previewUrl": "/templates/youngwheels/",
+      "description": "Vibrant, hyper-engaging consumer catalog and manufacturing portal. Features dynamic product carousels, safety certifications, interactive category navigation, and direct WhatsApp commerce.",
+      "keyFeatures": [
+        "Engaging Interactive Product Grids",
+        "Multi-Variant Color Selectors",
+        "One-Tap WhatsApp Bulk Order Funnel",
+        "Playful Fredoka & Nunito Modern Typography",
+        "Non-Toxic BIS Certified Trust Badges",
+        "Mobile-First Touch Optimized Navigation"
+      ],
+      "techStack": [
+        "React 19",
+        "Tailwind CSS v4",
+        "Motion Engine",
+        "Canvas Confetti",
+        "Lucide Icons"
+      ],
+      "routes": [
+        {
+          "path": "/",
+          "name": "Home"
+        },
+        {
+          "path": "/about-us",
+          "name": "About Us"
+        },
+        {
+          "path": "/categories",
+          "name": "Toy Categories"
+        },
+        {
+          "path": "/blog",
+          "name": "Parenting & Toys Blog"
+        },
+        {
+          "path": "/events",
+          "name": "Toy Expos & Events"
+        },
+        {
+          "path": "/social",
+          "name": "Community & Media"
+        },
+        {
+          "path": "/contact-us",
+          "name": "Contact Us"
+        }
+      ],
+      "hasProducts": true,
+      "hasServices": true,
+      "defaultBrand": {
+        "name": "Young Wheels",
+        "tagline": "India’s Premier Kids Toys & Ride-ons",
+        "description": "Crafting high-quality, non-toxic, ergonomic, and durable ride-on toys that spark imagination across India.",
+        "color": "#f43f5e",
+        "phone": "+91 7011227049",
+        "whatsapp": "+91 7011227049",
+        "email": "india.youngwheels@gmail.com",
+        "address": "Plot No 182-183, Khasra No 155, Lal Doora Village, Pooth Khurd, New Delhi – 110039",
+        "city": "Delhi, India"
+      },
+      "contentSchema": {
+        "allowCustomProducts": true,
+        "productFields": [
+          "name",
+          "category",
+          "modelCode",
+          "tagline",
+          "description",
+          "ageRange",
+          "weightCapacity",
+          "material",
+          "isBestSeller",
+          "isNewArrival",
+          "colors",
+          "image",
+          "price"
+        ],
+        "sections": [
+          {
+            "id": "hero",
+            "title": "Hero Section",
+            "fields": [
+              {
+                "id": "heading",
+                "label": "Hero Headline",
+                "type": "text",
+                "default": "Crafted For Joy. Engineered For Safety."
+              },
+              {
+                "id": "subheading",
+                "label": "Hero Subtitle",
+                "type": "textarea",
+                "default": "Discover India’s premier collection of BIS-certified ride-on cars, tricycles, and scooters."
+              },
+              {
+                "id": "ctaText",
+                "label": "Primary CTA Label",
+                "type": "text",
+                "default": "Explore Toy Models"
+              }
+            ]
+          }
+        ]
+      },
+      "sourcePath": "E:\\template\\sources\\youngwheels"
+    }
+  ]
+}

@@ -1,19 +1,27 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, SlidersHorizontal, ExternalLink, Lock } from 'lucide-react';
+import { ArrowUpRight, SlidersHorizontal, ExternalLink, PlusCircle, Sparkles } from 'lucide-react';
 
-export default function TemplateCard({ template, onSelect, onCustomize, clientBrand }) {
+export default function TemplateCard({ 
+  template, 
+  onSelect, 
+  onCustomize, 
+  onCreateWebsite, 
+  clientBrand 
+}) {
   const isPersonalized = Boolean(clientBrand.name);
   const activeColor = clientBrand.color || template.accentColor;
   const [iframeLoaded, setIframeLoaded] = useState(false);
 
-  const getCardIframeUrl = () => {
-    const url = new URL(template.previewUrl, window.location.origin);
-    if (clientBrand.name) url.searchParams.set('brand', clientBrand.name);
-    if (clientBrand.color) url.searchParams.set('color', clientBrand.color.replace('#', ''));
-    if (clientBrand.phone) url.searchParams.set('phone', clientBrand.phone);
-    if (clientBrand.tagline) url.searchParams.set('tagline', clientBrand.tagline);
-    return url.toString();
+  // Keep iframe src stable to prevent expensive iframe reloads while typing
+  const cardIframeSrc = template.previewUrl;
+
+  const getTierBadge = (tier) => {
+    if (tier === 'premium') return { label: 'PREMIUM WEBSITE', bg: 'rgba(244, 63, 94, 0.15)', text: '#f43f5e', border: 'rgba(244, 63, 94, 0.35)' };
+    if (tier === 'standard') return { label: 'STANDARD WEBSITE', bg: 'rgba(234, 179, 8, 0.15)', text: '#eab308', border: 'rgba(234, 179, 8, 0.35)' };
+    return { label: 'BASIC WEBSITE', bg: 'rgba(59, 130, 246, 0.15)', text: '#60a5fa', border: 'rgba(59, 130, 246, 0.35)' };
   };
+
+  const tierBadge = getTierBadge(template.tier);
 
   return (
     <div 
@@ -22,7 +30,9 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        border: '1px solid var(--border-medium, rgba(255, 255, 255, 0.08))',
+        borderRadius: 18
       }}
     >
       {/* Real Live Miniature Website Browser Preview */}
@@ -71,7 +81,6 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
             background: template.heroColor ? `${template.heroColor}33` : '#0d1017'
           }}
         >
-          {/* Subtle placeholder while iframe loads */}
           {!iframeLoaded && (
             <div 
               style={{
@@ -92,7 +101,7 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
           )}
 
           <iframe
-            src={getCardIframeUrl()}
+            src={cardIframeSrc}
             title={`${template.title} preview`}
             tabIndex="-1"
             scrolling="no"
@@ -114,21 +123,20 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
       {/* Card Content Information */}
       <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         
-        {/* Industry Tag & Turnaround */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-          <div style={{ 
-            fontSize: 11, 
-            fontFamily: 'var(--font-mono)', 
-            color: activeColor, 
-            letterSpacing: '0.04em', 
-            textTransform: 'uppercase',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6
+        {/* Tier Badge & Industry Tag */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+          <span style={{
+            padding: '3px 8px',
+            borderRadius: 6,
+            fontSize: 10,
+            fontWeight: 800,
+            letterSpacing: '0.05em',
+            background: tierBadge.bg,
+            color: tierBadge.text,
+            border: `1px solid ${tierBadge.border}`
           }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: activeColor }} />
-            {template.industry}
-          </div>
+            {tierBadge.label}
+          </span>
 
           <span className="badge-mono" style={{ fontSize: 10 }}>
             {template.completionTime}
@@ -136,12 +144,12 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
         </div>
 
         {/* Title */}
-        <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-main)', letterSpacing: '-0.02em', lineHeight: 1.25 }}>
+        <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-main)', letterSpacing: '-0.02em', lineHeight: 1.25, margin: '0 0 4px' }}>
           {isPersonalized ? `${clientBrand.name}` : template.title}
         </h3>
 
         {/* Tagline */}
-        <p style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4, lineHeight: 1.4 }}>
+        <p style={{ fontSize: 12, color: 'var(--text-muted)', margin: 0, lineHeight: 1.4 }}>
           {isPersonalized && clientBrand.tagline ? clientBrand.tagline : template.tagline}
         </p>
 
@@ -174,29 +182,57 @@ export default function TemplateCard({ template, onSelect, onCustomize, clientBr
         </div>
 
         {/* Action Controls */}
-        <div style={{ marginTop: 'auto', display: 'flex', gap: 8 }}>
+        <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: 8 }}>
           <button
-            onClick={() => onSelect(template)}
-            className="btn-primary"
-            style={{ 
-              flex: 1, 
-              padding: '9px 14px', 
-              fontSize: 12,
-              justifyContent: 'space-between'
+            onClick={() => onCreateWebsite(template)}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 8,
+              padding: '10px 16px',
+              borderRadius: 10,
+              background: `linear-gradient(135deg, ${activeColor} 0%, #2563eb 100%)`,
+              border: 'none',
+              color: '#ffffff',
+              fontSize: 13,
+              fontWeight: 700,
+              cursor: 'pointer',
+              boxShadow: '0 6px 16px -4px rgba(0, 0, 0, 0.4)'
             }}
           >
-            <span>Launch Live Simulator</span>
-            <ArrowUpRight size={14} />
+            <PlusCircle size={15} />
+            <span>Create Website</span>
           </button>
 
-          <button
-            onClick={() => onCustomize(template)}
-            className="btn-secondary"
-            title="Personalize Client Brand"
-            style={{ padding: '9px 12px' }}
-          >
-            <SlidersHorizontal size={14} />
-          </button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              onClick={() => onSelect(template)}
+              className="btn-primary"
+              style={{ 
+                flex: 1, 
+                padding: '8px 12px', 
+                fontSize: 12,
+                justifyContent: 'center',
+                background: 'rgba(255, 255, 255, 0.06)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                color: '#cbd5e1'
+              }}
+            >
+              <span>Live Simulator</span>
+              <ArrowUpRight size={13} />
+            </button>
+
+            <button
+              onClick={() => onCustomize(template)}
+              className="btn-secondary"
+              title="Personalize Brand"
+              style={{ padding: '8px 12px' }}
+            >
+              <SlidersHorizontal size={14} />
+            </button>
+          </div>
         </div>
 
       </div>

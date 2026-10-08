@@ -1,122 +1,203 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TemplateCard from './TemplateCard';
-import { ArrowRight, Monitor, SlidersHorizontal, Check } from 'lucide-react';
+import { ArrowRight, Layers, SlidersHorizontal, RefreshCw, Check, Sparkles, Building2, Crown, Shield } from 'lucide-react';
 
 export default function TemplateCatalog({ 
   templates, 
   activeFilter, 
   onSelectTemplate, 
   onOpenPersonalizer, 
+  onCreateWebsite,
+  onRefreshLibrary,
   clientBrand 
 }) {
-  const filteredTemplates = activeFilter === 'All Templates'
-    ? templates
-    : templates.filter(t => t.category === activeFilter);
+  const [selectedTier, setSelectedTier] = useState('all'); // 'all' | 'basic' | 'standard' | 'premium'
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const filteredTemplates = templates.filter(t => {
+    const matchesCategory = activeFilter === 'All Templates' || t.category === activeFilter;
+    const matchesTier = selectedTier === 'all' || t.tier === selectedTier;
+    return matchesCategory && matchesTier;
+  });
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    if (onRefreshLibrary) {
+      await onRefreshLibrary();
+    }
+    setTimeout(() => setIsRefreshing(false), 600);
+  };
+
+  const basicCount = templates.filter(t => t.tier === 'basic').length;
+  const standardCount = templates.filter(t => t.tier === 'standard').length;
+  const premiumCount = templates.filter(t => t.tier === 'premium').length;
 
   return (
     <div style={{ maxWidth: 1440, margin: '0 auto', padding: '36px 24px 80px 24px' }}>
       
-      {/* Editorial Minimalist Hero Header */}
+      {/* Editorial Hero Header */}
       <div 
         style={{ 
-          padding: '40px 0 36px 0', 
+          padding: '36px 0 32px 0', 
           borderBottom: '1px solid var(--border-subtle)',
-          marginBottom: 40,
+          marginBottom: 36,
           display: 'flex',
           flexDirection: 'column',
           gap: 20
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span className="badge-mono" style={{ color: 'var(--text-main)', background: 'var(--bg-input)' }}>
-            PORTFOLIO REPOSITORY
-          </span>
-          <span style={{ fontSize: 12, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
-            // 4 PRODUCTION FRAMEWORKS
-          </span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span className="badge-mono" style={{ color: 'var(--text-main)', background: 'var(--bg-input)' }}>
+              DYNAMIC TEMPLATE REPOSITORY
+            </span>
+            <span style={{ fontSize: 12, color: 'var(--text-dim)', fontFamily: 'var(--font-mono)' }}>
+              // {templates.length} DISCOVERED FRAMEWORKS
+            </span>
+          </div>
+
+          <button
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              padding: '8px 16px',
+              borderRadius: 8,
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              color: '#cbd5e1',
+              fontSize: 12,
+              fontWeight: 600,
+              cursor: 'pointer',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <RefreshCw size={13} className={isRefreshing ? 'animate-spin' : ''} />
+            <span>{isRefreshing ? 'Scanning sources/...' : 'Refresh Template Library'}</span>
+          </button>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24 }}>
-          <div style={{ maxWidth: 740 }}>
+          <div style={{ maxWidth: 780 }}>
             <h1 
               style={{ 
-                fontSize: 'clamp(32px, 3.8vw, 52px)', 
+                fontSize: 'clamp(28px, 3.6vw, 48px)', 
                 fontWeight: 800, 
-                lineHeight: 1.1, 
+                lineHeight: 1.15, 
                 letterSpacing: '-0.035em', 
                 color: 'var(--text-main)',
-                marginBottom: 14
+                margin: '0 0 14px'
               }}
             >
-              Interactive Website Atelier & Live Client Pitch Engine.
+              Dynamic Website Template Library & Client Website Builder
             </h1>
-            <p style={{ fontSize: 'clamp(14px, 1.2vw, 16px)', color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: 640 }}>
-              Live interactive digital showroom. Test websites inside responsive device viewports, personalize logos and brand colors in real-time, and send shareable client links.
+            <p style={{ fontSize: 'clamp(14px, 1.2vw, 16px)', color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: 680, margin: 0 }}>
+              Convert discovered React projects into customized client websites without manually modifying source code. Filter by Basic, Standard, and Premium tiers.
             </p>
           </div>
 
-          {/* Quick Metrics Bar */}
+          {/* Tier Counts Cards */}
           <div 
             style={{ 
               display: 'flex', 
-              gap: 28, 
-              padding: '16px 24px', 
+              gap: 16, 
+              padding: '12px 18px', 
               borderRadius: 14, 
               background: 'var(--bg-surface)', 
               border: '1px solid var(--border-subtle)',
               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.04)'
             }}
           >
-            <div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>04</div>
-              <div style={{ fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Frameworks</div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 18, fontWeight: 800, color: '#60a5fa', fontFamily: 'var(--font-mono)' }}>{basicCount}</div>
+              <div style={{ fontSize: 10, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Basic</div>
             </div>
             <div style={{ width: 1, background: 'var(--border-subtle)' }} />
-            <div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: 'var(--text-main)', fontFamily: 'var(--font-mono)' }}>3x</div>
-              <div style={{ fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Device Modes</div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 18, fontWeight: 800, color: '#eab308', fontFamily: 'var(--font-mono)' }}>{standardCount}</div>
+              <div style={{ fontSize: 10, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Standard</div>
             </div>
             <div style={{ width: 1, background: 'var(--border-subtle)' }} />
-            <div>
-              <div style={{ fontSize: 20, fontWeight: 700, color: '#10b981', fontFamily: 'var(--font-mono)' }}>Live</div>
-              <div style={{ fontSize: 11, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>White-Labeling</div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: 18, fontWeight: 800, color: '#f43f5e', fontFamily: 'var(--font-mono)' }}>{premiumCount}</div>
+              <div style={{ fontSize: 10, color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Premium</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Active Client Personalization Notice (if configured) */}
-      {clientBrand.name && (
-        <div 
-          style={{ 
-            marginBottom: 32,
-            padding: '12px 20px',
-            borderRadius: 12,
-            background: 'rgba(16, 185, 129, 0.08)',
-            border: '1px solid rgba(16, 185, 129, 0.25)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 12
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: clientBrand.color || '#10b981' }} />
-            <span style={{ fontSize: 13, color: 'var(--text-main)' }}>
-              Active Client Simulation: <strong style={{ color: 'var(--text-main)' }}>{clientBrand.name}</strong>
-              {clientBrand.tagline && <span style={{ color: 'var(--text-muted)' }}> — {clientBrand.tagline}</span>}
-            </span>
-          </div>
-          <button 
-            onClick={onOpenPersonalizer}
-            className="btn-ghost"
-            style={{ fontSize: 12, padding: '4px 10px', textDecoration: 'underline' }}
-          >
-            Edit Brand Parameters
-          </button>
+      {/* Tier Segregation Tabs */}
+      <div style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 16,
+        marginBottom: 32,
+        padding: '16px 20px',
+        borderRadius: 16,
+        background: 'var(--bg-surface-elevated, rgba(15, 23, 42, 0.6))',
+        border: '1px solid var(--border-medium, rgba(255, 255, 255, 0.08))'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginRight: 4 }}>
+            Website Tier:
+          </span>
+
+          {[
+            { id: 'all', label: 'All Tiers', count: templates.length, color: '#94a3b8' },
+            { id: 'basic', label: 'Basic Websites', count: basicCount, color: '#60a5fa', icon: Shield },
+            { id: 'standard', label: 'Standard Websites', count: standardCount, color: '#eab308', icon: Crown },
+            { id: 'premium', label: 'Premium Websites', count: premiumCount, color: '#f43f5e', icon: Sparkles }
+          ].map(tier => {
+            const isActive = selectedTier === tier.id;
+            const Icon = tier.icon;
+            return (
+              <button
+                key={tier.id}
+                onClick={() => setSelectedTier(tier.id)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 16px',
+                  borderRadius: 10,
+                  background: isActive ? `${tier.color}20` : 'transparent',
+                  border: isActive ? `1px solid ${tier.color}60` : '1px solid rgba(255, 255, 255, 0.08)',
+                  color: isActive ? '#ffffff' : '#94a3b8',
+                  fontSize: 13,
+                  fontWeight: isActive ? 700 : 500,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {Icon && <Icon size={14} color={tier.color} />}
+                <span>{tier.label}</span>
+                <span style={{
+                  padding: '1px 6px',
+                  borderRadius: 9999,
+                  background: isActive ? tier.color : 'rgba(255, 255, 255, 0.08)',
+                  color: isActive ? '#ffffff' : '#94a3b8',
+                  fontSize: 10,
+                  fontWeight: 800
+                }}>
+                  {tier.count}
+                </span>
+              </button>
+            );
+          })}
         </div>
-      )}
+
+        {/* Tier helper note */}
+        <div style={{ fontSize: 12, color: '#64748b' }}>
+          {selectedTier === 'basic' && '⚡ Padma Cables & Electwell: Clean B2B Industrial, high credibility & lead generation.'}
+          {selectedTier === 'standard' && '✨ Plaza Quartz: Luxury atelier layout, zero-crop showcases & Locomotive scroll.'}
+          {selectedTier === 'premium' && '🔥 Young Wheels: Motion micro-interactions, variant selectors & commerce funnels.'}
+          {selectedTier === 'all' && 'Click "Create Website" on any template to launch the client wizard.'}
+        </div>
+      </div>
 
       {/* Templates Grid */}
       <div 
@@ -130,67 +211,12 @@ export default function TemplateCatalog({
           <TemplateCard
             key={template.id}
             template={template}
-            clientBrand={clientBrand}
             onSelect={onSelectTemplate}
             onCustomize={onOpenPersonalizer}
+            onCreateWebsite={onCreateWebsite}
+            clientBrand={clientBrand}
           />
         ))}
-      </div>
-
-      {/* Minimalist Agency Workflow Footer */}
-      <div 
-        style={{ 
-          marginTop: 64, 
-          padding: '32px', 
-          borderRadius: 18, 
-          background: 'var(--bg-surface)', 
-          border: '1px solid var(--border-subtle)',
-          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)'
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
-          <div>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-main)', letterSpacing: '-0.02em', marginBottom: 4 }}>
-              Three-Step Client Pitch Protocol
-            </h3>
-            <p style={{ fontSize: 13, color: 'var(--text-dim)', margin: 0 }}>
-              Close prospective clients faster during live screen-share or in-person meetings.
-            </p>
-          </div>
-          <span className="badge-mono">AGENCY PROTOCOL</span>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 20 }}>
-          <div style={{ padding: 18, borderRadius: 12, background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}>
-            <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', display: 'block', marginBottom: 8 }}>
-              PHASE 01
-            </span>
-            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)', marginBottom: 4 }}>Select Niche Framework</div>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
-              Pick the industry layout: Horology & Luxury, Heavy Engineering, Power Infrastructure, or Consumer Goods.
-            </p>
-          </div>
-
-          <div style={{ padding: 18, borderRadius: 12, background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}>
-            <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', display: 'block', marginBottom: 8 }}>
-              PHASE 02
-            </span>
-            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)', marginBottom: 4 }}>Inject Client Brand</div>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
-              Input business name, upload their logo or generate an instant monogram, and set accent colors in real-time.
-            </p>
-          </div>
-
-          <div style={{ padding: 18, borderRadius: 12, background: 'var(--bg-input)', border: '1px solid var(--border-subtle)' }}>
-            <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: 'var(--text-dim)', display: 'block', marginBottom: 8 }}>
-              PHASE 03
-            </span>
-            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-main)', marginBottom: 4 }}>Dispatch Pitch Link</div>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
-              Generate a custom link with preloaded brand query parameters and send directly via WhatsApp or email.
-            </p>
-          </div>
-        </div>
       </div>
 
     </div>

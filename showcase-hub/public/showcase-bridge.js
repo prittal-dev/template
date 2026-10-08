@@ -271,17 +271,29 @@
     });
   }
 
+  let isMutatingInternal = false;
+  let brandingDebounceTimer = null;
+
   function applyBranding(data) {
     if (!data) return;
     currentBrandData = { ...currentBrandData, ...data };
-    const { name, tagline, primaryColor, phone, email, logoUrl } = currentBrandData;
+    if (brandingDebounceTimer) clearTimeout(brandingDebounceTimer);
+    brandingDebounceTimer = setTimeout(() => {
+      runApplyBranding();
+    }, 100);
+  }
 
-    // 1. Dynamic Logo & Brand Name in Navbar
-    if (logoUrl || (name && name.trim())) {
-      applyLogo(logoUrl, name, primaryColor);
-    } else {
-      restoreOriginalLogos();
-    }
+  function runApplyBranding() {
+    isMutatingInternal = true;
+    try {
+      const { name, tagline, primaryColor, phone, email, logoUrl } = currentBrandData;
+
+      // 1. Dynamic Logo & Brand Name in Navbar
+      if (logoUrl || (name && name.trim())) {
+        applyLogo(logoUrl, name, primaryColor);
+      } else {
+        restoreOriginalLogos();
+      }
 
     // 2. Comprehensive Dynamic Color Injection
     if (primaryColor) {
@@ -427,9 +439,17 @@
 
     // 5. Floating Demo Watermark / Pill
     updateDemoWatermark(name, primaryColor);
+    } finally {
+      setTimeout(() => {
+        isMutatingInternal = false;
+      }, 50);
+    }
   }
 
-  function updateDemoWatermark(name, color) {
+  let currentTier = 'basic';
+
+  function updateDemoWatermark(name, color, tier) {
+    if (tier) currentTier = tier;
     let badge = document.getElementById('showcase-demo-badge');
     if (!badge) {
       badge = document.createElement('div');
@@ -443,7 +463,7 @@
         align-items: center;
         gap: 8px;
         padding: 6px 14px;
-        background: rgba(15, 23, 42, 0.88);
+        background: rgba(15, 23, 42, 0.92);
         color: #ffffff;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         font-size: 11px;
@@ -461,17 +481,28 @@
 
     const brandLabel = name ? name : 'Template Preview';
     const accent = color || '#3b82f6';
+    const tierTag = currentTier.toUpperCase();
+    const tierBg = currentTier === 'premium' ? '#f43f5e' : currentTier === 'standard' ? '#eab308' : '#3b82f6';
+
     badge.innerHTML = `
-      <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${accent};box-shadow:0 0 8px ${accent};"></span>
+      <span style="display:inline-block;padding:2px 6px;border-radius:4px;background:${tierBg};color:#ffffff;font-size:9px;font-weight:800;letter-spacing:0.05em;">${tierTag}</span>
+      <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:${accent};box-shadow:0 0 8px ${accent};"></span>
       <span>${brandLabel}</span>
-      <span style="color:rgba(255,255,255,0.45);font-size:9px;text-transform:uppercase;">Live Demo</span>
+      <span style="color:rgba(255,255,255,0.45);font-size:9px;text-transform:uppercase;">Live Preview</span>
     `;
   }
 
   // Handle postMessage from Showcase Hub parent
   window.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'SHOWCASE_UPDATE_BRAND') {
-      applyBranding(event.data.payload);
+    if (event.data) {
+      if (event.data.type === 'SHOWCASE_UPDATE_BRAND') {
+        if (event.data.tier) currentTier = event.data.tier;
+        applyBranding(event.data.payload);
+      }
+      if (event.data.type === 'SHOWCASE_UPDATE_TIER') {
+        currentTier = event.data.tier || 'basic';
+        updateDemoWatermark(currentBrandData.name, currentBrandData.primaryColor, currentTier);
+      }
     }
   });
 
@@ -510,6 +541,7 @@
   window.addEventListener('load', () => {
     initFromUrl();
     const observer = new MutationObserver(() => {
+      if (isMutatingInternal) return; // Prevent mutation recursion loops!
       if (currentBrandData.name || currentBrandData.logoUrl) {
         applyLogo(currentBrandData.logoUrl, currentBrandData.name, currentBrandData.primaryColor);
       }
